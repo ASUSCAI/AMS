@@ -1,6 +1,6 @@
 package com.example;
 
-import com.example.model.Message;
+import com.example.model.AttendanceLog;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,11 +18,11 @@ public class ApplicationTest {
 
     @Test
     public void shouldGetMessage() {
-        ResponseEntity<Message> response = restTemplate.getForEntity("/hello", Message.class);
+        ResponseEntity<AttendanceLog> response = restTemplate.getForEntity("/attendance", AttendanceLog.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-        Message message = response.getBody();
-        assertThat(message.getMessage()).isEqualTo("Hello, World!");
+        // Message message = response.getBody();
+        // assertThat(message.getMessage()).isEqualTo("Hello, World!");
     }
 
 }

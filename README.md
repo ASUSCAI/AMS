@@ -1,10 +1,6 @@
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
-
-# Spring Boot boilerplate
+# AMS: Spring Boot Backend
 
 Quick start for Spring Boot and Gradle.
-
-![CI](https://github.com/cristiangreco/spring-boot-boilerplate/workflows/CI/badge.svg)
 
 ## How to build
 
