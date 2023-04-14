@@ -35,5 +35,5 @@ $ java -jar build/libs/ams-backend-0.1.0.jar
 
 ```sh
 $ curl http://localhost:8080/hi?name=Gabe
-{"message":"Hi Gabe"}
+"Hi Gabe"
 ```
