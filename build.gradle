@@ -1,0 +1,17 @@
+plugins {
+    id 'org.springframework.boot' version '2.7.1'
+    id 'io.spring.dependency-management' version '1.0.12.RELEASE'
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+group = "com.ams"
+version = "0.1.0"
+
+dependencies {
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+}
