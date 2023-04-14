@@ -27,6 +27,6 @@ $ java -jar build/libs/spring-boot-boilerplate-0.1.0.jar
 ## Testing with Curl
 
 ```sh
-$ curl http://localhost:8080/hello
-{"message":"Hello, World!"}
+$ curl http://localhost:8080/hi?name=Gabe
+{"message":"Hi Gabe"}
 ```
