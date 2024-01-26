@@ -8,7 +8,8 @@ JDK 17
 Build with Gradle wrapper:
 
 ```sh
-$ ./gradlew clean build
+$ ./gradlew setupFrontend
+$ ./gradlew exportFrontend
 ```
 
 ## How to run
@@ -19,9 +20,6 @@ Run with Gradle wrapper:
 $ ./gradlew bootRun
 ```
 
-## Testing with Curl
-
-```sh
-$ curl http://localhost:8080/hi?name=Gabe
+Frontend is accessible at  http://localhost:8080/
 "Hi Gabe"
 ```

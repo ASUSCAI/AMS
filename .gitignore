@@ -38,6 +38,9 @@ out/
 .vscode/
 
 ### Preserve H2 Database ###
+
+
+
 src/main/resources/application.properties
 .DS_Store
 *.csv
