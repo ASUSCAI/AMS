@@ -11,25 +11,25 @@ const PairOption: React.FC<PairOptionProps> = (props) => {
   const [currentStatus, setCurrentStatus] = useState(status);
 
   const handleStatusChange = () => {
-    // // Make a POST request to update the status
-    // fetch("your-api-endpoint", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     name,
-    //     status: currentStatus === "Unpaired"? "Paired": "Unpaired", // Set the new status value
-    //   }),
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     // Update the component state after successful POST request
-    //     setCurrentStatus(data.status);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error updating status:", error);
-    //   });
+    // Make a POST request to update the status
+    fetch("your-api-endpoint", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        status: currentStatus === "Unpaired"? "Paired": "Unpaired", // Set the new status value
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Update the component state after successful POST request
+        setCurrentStatus(data.status);
+      })
+      .catch((error) => {
+        console.error("Error updating status:", error);
+      });
 
     if (currentStatus === "Paired") {
       setCurrentStatus("Unpaired");

@@ -28,7 +28,7 @@ const SectionConfig = () => {
   useEffect(() => {
     const fetchSectionConfig = async () => {
       await axios
-        .get("https://api.ams-lti.com/courseInfo/" + courseID)
+        .get(process.env.NEXT_PUBLIC_URL + "/courseInfo/" + courseID)
         .then((res) => {
           const fetchedCourse = res.data as CourseInfo;
           console.log(fetchedCourse)
@@ -129,7 +129,7 @@ const SectionConfig = () => {
     setCurrCourse(inputCourse);
     const updateSectionConfig = async () => {
 
-      await axios.put("https://api.ams-lti.com/courseInfo/" + courseID, inputCourse)
+      await axios.put(process.env.NEXT_PUBLIC_URL + "/courseInfo/" + courseID, inputCourse)
         .then((response) => {
           console.log("Section Config updated:", response.data);
         })

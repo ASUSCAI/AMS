@@ -30,7 +30,7 @@ const SpecThresholdBox: React.FC<SpecThresholdBoxProps> = ({specificDate}) => {
     const fetchSpecTimeConfig = async (updatedDefaultConfig: TimeConfig) => {
       const [date] = specificDate.toISOString().split("T");
       try {
-        const res = await axios.get("https://api.ams-lti.com/timeConfig/" + courseID + "/" + date);
+        const res = await axios.get(process.env.NEXT_PUBLIC_URL + "/timeConfig/" + courseID + "/" + date);
         const config = res.data as TimeConfig;
         const updatedConfig = Object.fromEntries(
           Object.entries(config).map(([key, value]) => [
@@ -51,7 +51,7 @@ const SpecThresholdBox: React.FC<SpecThresholdBoxProps> = ({specificDate}) => {
 
     const fetchDefaultTimeConfig = async () => {
       try {
-        const res = await axios.get("https://api.ams-lti.com/timeConfig/" + courseID);
+        const res = await axios.get(process.env.NEXT_PUBLIC_URL + "/timeConfig/" + courseID);
         const config = res.data as TimeConfig;
         const updatedConfig = Object.fromEntries(
           Object.entries(config).map(([key, value]) => [
@@ -137,7 +137,7 @@ const SpecThresholdBox: React.FC<SpecThresholdBoxProps> = ({specificDate}) => {
 
       await axios
         .put(
-          "https://api.ams-lti.com/timeConfig/" + courseID + "/" + date,
+          process.env.NEXT_PUBLIC_URL + "/timeConfig/" + courseID + "/" + date,
           updatedConfig
         )
         .then((response) => {
@@ -167,7 +167,7 @@ const SpecThresholdBox: React.FC<SpecThresholdBoxProps> = ({specificDate}) => {
     setTimeConfigData(defaultConfigData);
     setInputConfigData(defaultConfigData);
     await axios
-      .delete("https://api.ams-lti.com/timeConfig/" + courseID + "/" + date)
+      .delete(process.env.NEXT_PUBLIC_URL + "/timeConfig/" + courseID + "/" + date)
       .then((response) => {
         doRefreshSlider(prev => prev + 1);
       })

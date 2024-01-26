@@ -94,7 +94,7 @@ const AttendanceView = () => {
         const fetchCourseConfig = async () => {
             await axios
                 // @ts-ignore
-                .get(process.env.NEXT_PUBLIC_COURSEINFO_ENDPOINT + courseID)
+                .get(process.env.NEXT_PUBLIC_URL + "/courseInfo/" + courseID)
                 .then((res) => {
                     const fetchedCourse = res.data as CourseInfo;
 
@@ -109,7 +109,7 @@ const AttendanceView = () => {
             console.log(">>>", dayjs(currentDate).format("YYYY-MM-DD"));
             await axios
                 // @ts-ignore
-                .get(process.env.NEXT_PUBLIC_ATTENDANCE_ENDPOINT, {
+                .get(process.env.NEXT_PUBLIC_URL + "/attendance", {
                     headers: {
                         "Access-Control-Allow-Origin": process.env.NEXT_PUBLIC_URL,
                     },
