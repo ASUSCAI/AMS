@@ -51,7 +51,7 @@ const ThresholdBox = () => {
   useEffect(() => {
     const fetchTimeConfig = async () => {
       await axios
-        .get("https://api.ams-lti.com/timeConfig/" + courseID)
+        .get(process.env.NEXT_PUBLIC_URL + "/timeConfig/" + courseID)
         .then((res) => {
           const config = res.data as TimeConfig;
           const updatedConfig = Object.fromEntries(
@@ -247,7 +247,7 @@ const ThresholdBox = () => {
       // };
 
       await axios
-        .put("https://api.ams-lti.com/timeConfig/" + courseID, updatedConfig)
+        .put(process.env.NEXT_PUBLIC_URL + "/timeConfig/" + courseID, updatedConfig)
         .then((response) => {
           console.log("Time Config updated:", response.data);
         })
