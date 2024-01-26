@@ -1,8 +1,8 @@
 # Attendance Management System (AMS) Software
 
 ## Requirements
-JDK 17
-Node.js (Latest LTS version)
+- JDK 17
+- Node.js (Latest LTS version)
 
 ## How to build
 
