@@ -2,6 +2,7 @@
 
 ## Requirements
 JDK 17
+Node.js (Latest LTS version)
 
 ## How to build
 
