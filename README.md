@@ -1,4 +1,4 @@
-# AMS: Spring Boot Backend
+# Attendance Management System (AMS) Software
 
 ## Requirements
 JDK 17
