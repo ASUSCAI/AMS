@@ -20,6 +20,4 @@ Run with Gradle wrapper:
 $ ./gradlew bootRun
 ```
 
-Frontend is accessible at  http://localhost:8080/
-"Hi Gabe"
-```
+Upon reaching 85% the frontend should become accessible at http://localhost:8080/
