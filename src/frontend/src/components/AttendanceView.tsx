@@ -40,8 +40,7 @@ export type User = {
 type FilterOpts = {
     beginTime: string | undefined;
     endTime: string | undefined;
-    firstName: string | undefined;
-    lastName: string | undefined;
+    name: string | undefined;
     sid: number | undefined;
     typesOfScan: string[] | undefined;
 };
@@ -63,8 +62,7 @@ const AttendanceView = () => {
     const [selectedFilters, setSelectedFilters] = useState<FilterOpts>({
         beginTime: undefined,
         endTime: undefined,
-        firstName: undefined,
-        lastName: undefined,
+        name: undefined,
         sid: undefined,
         typesOfScan: ['ARRIVED', 'LEFT', 'ARRIVED_LATE', 'ARRIVED_INVALID', 'LEFT_INVALID', 'INVALID'],
     });
@@ -190,9 +188,8 @@ const AttendanceView = () => {
             const filterVals = {
                 beginTime: retrieveTimeFromISODate(inputFilters.beginTime),
                 endTime: retrieveTimeFromISODate(inputFilters.endTime),
-                firstName: inputFilters.firstName,
-                lastName: inputFilters.lastName,
-                sid: inputFilters.sid,
+                name: inputFilters.name,
+                sid: undefined,
                 typesOfScan: inputFilters.typesOfScan,
             }
             setSelectedFilters(filterVals);
@@ -206,8 +203,7 @@ const AttendanceView = () => {
         const filterVals = {
             beginTime: undefined, 
             endTime: undefined,
-            firstName: undefined,
-            lastName: undefined,
+            name: undefined,
             sid: undefined,
             typesOfScan: ['ARRIVED', 'LEFT', 'ARRIVED_LATE', 'ARRIVED_INVALID', 'LEFT_INVALID', 'INVALID'],
         }
@@ -308,51 +304,22 @@ const AttendanceView = () => {
 
                     <View display="inline-block" padding="small" width="25rem">
                         <TextInput
-                            renderLabel="Last Name"
-                            placeholder="Enter exact last name to search"
+                            renderLabel="Search Person"
+                            placeholder="Enter Full Name to Search"
                             onChange={(event, value) =>
                                 setInputFilters((prevData: FilterOpts) => {
                                     if (prevData) {
-                                        return {...prevData, lastName: value};
+                                        return {...prevData, name: value};
                                     }
                                     return prevData;
                                 })
                             }
-                            value={inputFilters?.lastName ? inputFilters?.lastName : ""}
+                            value={inputFilters?.name ? inputFilters?.name : ""}
                         />
                     </View>
 
-                    <View display="inline-block" padding="small" width="25rem">
-                        <TextInput
-                            renderLabel="First Name"
-                            placeholder="Enter exact first name to search"
-                            onChange={(event, value) =>
-                                setInputFilters((prevData: FilterOpts) => {
-                                    if (prevData) {
-                                        return {...prevData, firstName: value};
-                                    }
-                                    return prevData;
-                                })
-                            }
-                            value={inputFilters?.firstName ? inputFilters?.firstName : ""}
-                        />
-                    </View>
 
-                    <View display="inline-block" padding="small" maxWidth="15rem">
-                        <TextInput
-                            renderLabel="ID #"
-                            placeholder="Enter ASU ID"
-                            onChange={(event, value) =>
-                                setInputFilters((prevData: FilterOpts) => {
-                                    if (prevData) {
-                                        return {...prevData, sid: parseInt(value)};
-                                    }
-                                    return prevData;
-                                })
-                            }
-                            value={inputFilters?.sid ? (inputFilters?.sid).toString() : ""}
-                        />
-                    </View>
+                
 
                     <br></br>
                     <View display="inline-block" padding="small" width="54rem">
