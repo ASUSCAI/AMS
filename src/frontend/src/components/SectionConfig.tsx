@@ -4,6 +4,7 @@ import React, {useEffect, useState} from "react";
 import {RiArrowDownSLine, RiArrowUpSLine} from "react-icons/ri";
 
 import {TimeConfig, BoundError, areTimeConfigsEqual} from "./ThresholdBox";
+import DateSlider from "@/components/DateSlider";
 
 export type CourseInfo = {
   // add more attributes moving forward
@@ -19,6 +20,7 @@ const SectionConfig = () => {
   const [currCourse, setCurrCourse] = useState<CourseInfo>();
   const [inputCourse, setInputCourse] = useState<CourseInfo>();
   const [error, setError] = useState<BoundError>();
+  const [refreshSlider, doRefreshSlider] = useState(0);
 
   const days = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"];
   const daysLabel = ["M", "T", "W", "Th", "F"];
@@ -124,6 +126,7 @@ const SectionConfig = () => {
 
   const handleCancel = () => {
     setInputCourse(currCourse);
+    doRefreshSlider(prev => prev + 1);
   };
   const handleSave = () => {
     setCurrCourse(inputCourse);
@@ -252,6 +255,25 @@ const SectionConfig = () => {
             width="19rem"
           />
         </div>
+        <p className={"default-slider-label"}>Default Time Config:</p>
+        <DateSlider
+          timeConfigData={currCourse?.defaultTimeConfig}
+          refresh={refreshSlider}
+          disabled={false}
+          onChange={(value: string[]) =>
+            setInputCourse((prevData: CourseInfo | undefined) => {
+              if (prevData) {
+                return {
+                  ...prevData,
+                  defaultTimeConfig: {
+                    ...prevData.defaultTimeConfig, endIn: value[0], endLate: value[1], beginOut: value[2]
+                  } as TimeConfig
+                };
+              }
+              return prevData;
+            })
+          }
+        />
         <div className="btn-box">
           <Button
             className="sub-btn cancel-btn"

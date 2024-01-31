@@ -577,6 +577,13 @@ a {
     width: 1rem;
 }
 
+.default-slider-label {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: auto;
+    text-align: center;
+}
+
 .week-days-container {
     display: flex;
     justify-content: space-around;
