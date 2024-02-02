@@ -33,19 +33,31 @@ task cleanStatic(type: Delete) {
 }
 
 task buildFrontend(type: Exec) {
-	workingDir 'src/frontend'
-	commandLine 'npm.cmd', 'run', 'build'
+	doLast {
+		workingDir 'src/frontend'
+		print "Building frontend... "
+		if (System.properties['os.name'].toLowerCase().contains('windows')) {
+			println "(Windows)"
+			commandLine 'npm.cmd', 'run', 'build'
+		} else { // assume UNIX
+			println "(Unix)"
+			commandLine 'npm', 'run', 'build'
+		}
+	}
 }
 
-task setupFrontend(type: Exec){
-	workingDir 'src/frontend'
-    if (System.properties['os.name'].toLowerCase().contains('windows')) {
-        println "Building frontend... (Windows)"
-        commandLine 'npm.cmd', 'install'
-    } else { // assume UNIX
-        println "Building frontend... (Unix)"
-        commandLine 'npm', 'install'
-    }
+task setupFrontend(type: Exec) {
+	doLast {
+		workingDir 'src/frontend'
+		print "Installing frontend dependencies... "
+		if (System.properties['os.name'].toLowerCase().contains('windows')) {
+			println "(Windows)"
+			commandLine 'npm.cmd', 'install'
+		} else { // assume UNIX
+			println "(Unix)"
+			commandLine 'npm', 'install'
+		}
+	}
 }
 
 task copyFrontendBuildToResources(type: Copy) {
