@@ -34,7 +34,11 @@ task cleanStatic(type: Delete) {
 
 task buildFrontend(type: Exec) {
 	workingDir 'src/frontend'
-	commandLine 'npm.cmd', 'run', 'build'
+	if (System.properties['os.name'].toLowerCase().contains('windows')) {
+		commandLine 'npm.cmd', 'run', 'build'
+	} else {
+		commandLine 'npm', 'run', 'build'
+	}
 }
 
 task setupFrontend(type: Exec){
