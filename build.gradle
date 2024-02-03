@@ -32,30 +32,35 @@ task cleanStatic(type: Delete) {
 	delete 'src/main/resources/static'
 }
 
-task buildFrontend(type: Exec) {
+task buildFrontend() {
 	doLast {
-		workingDir 'src/frontend'
-		print "Building frontend... "
-		if (System.properties['os.name'].toLowerCase().contains('windows')) {
-			println "(Windows)"
-			commandLine 'npm.cmd', 'run', 'build'
-		} else { // assume UNIX
-			println "(Unix)"
-			commandLine 'npm', 'run', 'build'
+		exec {
+			workingDir 'src/frontend'
+			print "Building frontend... "
+			if (System.properties['os.name'].toLowerCase().contains('windows')) {
+				println "(Windows)"
+				commandLine 'npm.cmd', 'run', 'build'
+			} else { // assume UNIX
+				println "(Unix)"
+				commandLine 'npm', 'run', 'build'
+			}
 		}
+		
 	}
 }
 
-task setupFrontend(type: Exec) {
+task setupFrontend() {
 	doLast {
-		workingDir 'src/frontend'
-		print "Installing frontend dependencies... "
-		if (System.properties['os.name'].toLowerCase().contains('windows')) {
-			println "(Windows)"
-			commandLine 'npm.cmd', 'install'
-		} else { // assume UNIX
-			println "(Unix)"
-			commandLine 'npm', 'install'
+		exec {
+			workingDir 'src/frontend'
+			print "Installing frontend dependencies... "
+			if (System.properties['os.name'].toLowerCase().contains('windows')) {
+				println "(Windows)"
+				commandLine 'npm.cmd', 'install'
+			} else { // assume UNIX
+				println "(Unix)"
+				commandLine 'npm', 'install'
+			}
 		}
 	}
 }
