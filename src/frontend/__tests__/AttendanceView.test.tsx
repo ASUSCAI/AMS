@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import React from 'react';
-import {act, fireEvent, render, screen} from '@testing-library/react';
+import {act, fireEvent, render, screen, within} from '@testing-library/react';
 import AttendanceView from '@/components/AttendanceView';
 import userEvent from '@testing-library/user-event';
 
@@ -14,6 +14,7 @@ const fireDateChangeEvent = async (dateValue: string) => {
    await user.keyboard('07/17/2023');
 };
 
+// Firstly we are checking if we are rendering correctly
 test('should render attendance data records', async () => {
   const user = userEvent.setup();
   const result = render(<AttendanceView />);
@@ -53,3 +54,22 @@ test('should render filtering toggle group', () => {
 
   expect(filteringLabel).toBeInTheDocument();
 })
+
+test('should render "No attendance records found" if no data exists', () => {
+  render(<AttendanceView />);
+
+  const noRecordsFoundLabel = screen.getByText('No attendance records found.');
+
+  expect(noRecordsFoundLabel).toBeInTheDocument();
+});
+
+test.only('should check if sorting by time works', async () => {
+  const user = userEvent.setup();
+  const { container } = render(<AttendanceView />);
+  await fireDateChangeEvent('07/17/2023');
+
+  const timeColumnHeader = container.querySelector("css-1386l9d-colHeader__button");
+  user.click(timeColumnHeader);
+
+  expect(timeColumnHeader).toHaveAttribute('aria-sort', 'descending');
+});
