@@ -40,7 +40,7 @@ export type User = {
 type FilterOpts = {
     beginTime: string | undefined;
     endTime: string | undefined;
-    name: string | undefined;
+    person: string | undefined;
     sid: number | undefined;
     typesOfScan: string[] | undefined;
 };
@@ -62,7 +62,7 @@ const AttendanceView = () => {
     const [selectedFilters, setSelectedFilters] = useState<FilterOpts>({
         beginTime: undefined,
         endTime: undefined,
-        name: undefined,
+        person: undefined,
         sid: undefined,
         typesOfScan: ['ARRIVED', 'LEFT', 'ARRIVED_LATE', 'ARRIVED_INVALID', 'LEFT_INVALID', 'INVALID'],
     });
@@ -305,16 +305,16 @@ const AttendanceView = () => {
                     <View display="inline-block" padding="small" width="25rem">
                         <TextInput
                             renderLabel="Search Person"
-                            placeholder="Enter Full Name to Search"
+                            placeholder="Enter Person Details to search"
                             onChange={(event, value) =>
                                 setInputFilters((prevData: FilterOpts) => {
                                     if (prevData) {
-                                        return {...prevData, name: value};
+                                        return {...prevData, person: value};
                                     }
                                     return prevData;
                                 })
                             }
-                            value={inputFilters?.name ? inputFilters?.name : ""}
+                            value={inputFilters?.person ? inputFilters?.person : ""}
                         />
                     </View>
 
