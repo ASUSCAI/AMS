@@ -28,7 +28,6 @@ import edu.ksu.canvas.oauth.OauthToken;
 import edu.ksu.canvas.requestOptions.GetEnrollmentOptions;
 import edu.ksu.canvas.requestOptions.ListActiveCoursesInAccountOptions;
 import edu.ksu.canvas.requestOptions.MultipleSubmissionsOptions;
-import io.github.cdimascio.dotenv.Dotenv;
 import edu.ksu.canvas.oauth.NonRefreshableOauthToken;
 
 
@@ -41,9 +40,8 @@ public class Autograder {
 
     public Autograder(AttendanceRepository attendanceRepo){
         this.attendanceRepo = attendanceRepo;
-        Dotenv env = Dotenv.load();
-        apiFactory = new CanvasApiFactory(env.get("CANVAS_URL"));
-        oauthToken = new NonRefreshableOauthToken(env.get("API_KEY"));
+        apiFactory = new CanvasApiFactory(System.getenv("AMS_CANVAS_URL"));
+        oauthToken = new NonRefreshableOauthToken(System.getenv("AMS_CANVAS_API_TOKEN"));
     }
 
     public void gradeAssignments() throws IOException{
