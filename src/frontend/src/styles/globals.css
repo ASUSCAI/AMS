@@ -124,17 +124,30 @@ a {
     transition: all 0.3s ease-in-out;
 }
 
-.Pair-config-btn{
+.pair-config-btn{
     position: absolute;
-    top: 1rem;
-    right: 12rem;
-    display: inline-block;
-    padding: 0.5rem 1rem;
+    top: 1.5rem;
+    right: 13rem;
     border-radius: 0.25rem;
-    /* background-color: rgb(205, 31, 31); */
-    color: #fff;
+    padding: 0.4rem 0.75rem;
+    width: 6rem;
+    /* display: inline-block;
+    width: 6rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    background-color: rgb(216, 211, 211);
+    color: #000000; */
+    
     cursor: pointer;
-    transition: all 0.3s ease-in-out;
+    /* transition: all 0.3s ease-in-out; */
+
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .pair-list-items {

@@ -24,6 +24,7 @@ import {DateSelect} from "./DateSelect";
 import {MultipleSelect} from "./MultipleSelect";
 import dayjs from "dayjs";
 import SectionSelect from "./SectionSelect";
+import PairSplitButton from "./PairSplitButton";
 
 // types
 export type User = {
@@ -242,6 +243,7 @@ const AttendanceView = () => {
                 setCurrentDate={setCurrentDate}
                 disabled={false}
             ></DateSelect>
+            <PairSplitButton/>
             <div>
                 <h1 className="text-center font-medium text-3xl">
                     Attendance Table View

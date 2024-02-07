@@ -19,9 +19,7 @@ const Home: NextPage = () => {
   return (
     <div className="mt-20">
       <AttendanceView/>
-      <PairTray/>
       <ConfigTray/>
-      <PairTray/>
     </div>
   );
 };

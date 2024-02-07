@@ -13,7 +13,7 @@ const PairOption: React.FC<PairOptionProps> = (props) => {
   const handleStatusChange = () => {
     // Make a POST request to update the status
     // fetch("your-api-endpoint", {
-    //   method: "POST",
+    //   method: "GET",
     //   headers: {
     //     "Content-Type": "application/json",
     //   },
