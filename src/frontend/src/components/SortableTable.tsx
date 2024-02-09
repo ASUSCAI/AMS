@@ -85,6 +85,7 @@ export class SortableTable extends React.Component<SortableTableProps, SortableT
             <Table.Row>
                 {(headers || []).map(({id, text}) => (
                     <Table.ColHeader
+                        aria-label={"table-header"}
                         key={id}
                         id={id}
                         // width={width}

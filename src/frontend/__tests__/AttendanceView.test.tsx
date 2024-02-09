@@ -12,10 +12,11 @@ const fireDateChangeEvent = async (dateValue: string) => {
    await userEvent.clear(dateInput);
    await user.click(dateInput);
    await user.keyboard('07/17/2023');
+   await user.click(dateInput);
 };
 
 // Firstly we are checking if we are rendering correctly
-test('should render attendance data records', async () => {
+test.only('should render attendance data records', async () => {
   const user = userEvent.setup();
   const result = render(<AttendanceView />);
   
@@ -24,10 +25,14 @@ test('should render attendance data records', async () => {
   await userEvent.clear(dateInput);
   await user.click(dateInput);
   await user.keyboard('07/17/2023');
+  await user.click(dateInput); // closing the calendar view
 
   let attendance_table = screen.getAllByRole('row')
 
   expect(attendance_table).toBeInTheDocument;
+
+  // TODO: Output of this reveals that we are not in fact rendering attendance rows
+  screen.debug(undefined, 300000 );
 })
 
 test('should set 17th july 2023 as date', async () => {
@@ -63,13 +68,14 @@ test('should render "No attendance records found" if no data exists', () => {
   expect(noRecordsFoundLabel).toBeInTheDocument();
 });
 
-test.only('should check if sorting by time works', async () => {
+test('should check if sorting by time works', async () => {
   const user = userEvent.setup();
   const { container } = render(<AttendanceView />);
+  // TODO: The dates are still not being updated
   await fireDateChangeEvent('07/17/2023');
 
-  const timeColumnHeader = container.querySelector("css-1386l9d-colHeader__button");
-  user.click(timeColumnHeader);
+  const timeColumnHeader = screen.getByRole('button', { name: 'colHeader__button'});
+  await user.click(timeColumnHeader);
 
   expect(timeColumnHeader).toHaveAttribute('aria-sort', 'descending');
 });

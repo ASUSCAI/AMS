@@ -370,7 +370,7 @@ const AttendanceView = () => {
                 <br/>
                 {attendanceData.length > 0 ? (
                     <SortableTable
-                        aria-label="attendance view table records"
+                        aria-label="attendance-view-table-records"
                         layout="auto"
                         caption="Sortable table with attendance records"
                         headers={[
