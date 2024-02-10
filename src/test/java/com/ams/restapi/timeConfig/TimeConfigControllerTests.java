@@ -46,29 +46,42 @@ public class TimeConfigControllerTests {
     }
 
     @Test void courseInfoShouldCreateTimeConfig() throws Exception {
-
+        // utility
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        
+        // setting up test
         LocalTime startTime = LocalTime.of(8, 30);
         LocalTime endTime = LocalTime.of(9, 45);
-
+        CourseInfo testCourseInfo = new CourseInfo(1234L, 1234L, "CSE 110", "COOR170",
+            List.of(DayOfWeek.MONDAY),
+            startTime, endTime);
+        
+        // defining expectations
         LocalTime expectedBeginIn = startTime.minusMinutes(CourseInfo.DEFAULT_TOLERANCE);
         LocalTime expectedEndIn = startTime.plusMinutes(CourseInfo.DEFAULT_TOLERANCE);
         LocalTime expectedEndLate = startTime.plusMinutes(CourseInfo.DEFAULT_LATE_TOLERANCE);
         LocalTime expectedBeginOut = endTime.minusMinutes(CourseInfo.DEFAULT_TOLERANCE);
         LocalTime expectedEndOut = endTime.plusMinutes(CourseInfo.DEFAULT_TOLERANCE);
 
-        CourseInfo testCourseInfo = new CourseInfo(1234L, 1234L, "CSE 110", "COOR170",
-            List.of(DayOfWeek.MONDAY),
-            startTime, endTime);
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        // sending requests and checked for expected
 
-        MockHttpServletRequestBuilder request = put("/courseInfo/1234")
-        .content(mapper.writeValueAsString(testCourseInfo))
-        .contentType("application/json");
+        // OOP WAY OF SENDING MOCK MVC REQUEST AND CHECKING EXPECTED        
+        // MockHttpServletRequestBuilder request = put("/courseInfo/1234")
+        // .content(mapper.writeValueAsString(testCourseInfo))
+        // .contentType("application/json");
+        
+        // ResultActions response = mockMvc.perform(request);
+        // response.andExpect(status().isOk()).andDo(print());
+        
+        // FUNCTIONAL WAY OF SENDING MOCK MVC REQUEST AND CHECKING EXPECTED
 
-        ResultActions response = mockMvc.perform(request);
-        response.andExpect(status().isOk()).andDo(print());
+        mockMvc.perform(put("/courseInfo/1234")
+            .contentType("application/json")
+            // .content(mapper.writeValueAsString(testCourseInfo)))
+            .content(mapper.writeValueAsString(testCourseInfo)))
+            .andExpect(status().isOk()).andDo(print());
 
         mockMvc.perform(get("/timeConfig/1234"))
             .andExpect(status().isOk())
