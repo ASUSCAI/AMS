@@ -22,8 +22,8 @@ import jakarta.persistence.OneToOne;
 @Entity
 public class CourseInfo {
 
-    private static Long DEFAULT_TOLERANCE = 5L;
-    private static Long DEFAULT_LATE_TOLERANCE = 15L;
+    public static Long DEFAULT_TOLERANCE = 5L;
+    public static Long DEFAULT_LATE_TOLERANCE = 15L;
 
     private @Id Long id;
     private Long courseId;
