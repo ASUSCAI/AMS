@@ -45,17 +45,17 @@ a {
 
 
   .colored-box {
-    width: 150px; /* Adjust the width as needed */
-    height: 75px; /* Set height to match width for squares */
+    width: 150px;
+    height: 75px; 
     background-color: rgb(231, 151, 151);
     border: 1px solid #aaa;
-    padding: 10px; /* Adjust padding as needed */
-    margin-left: 10px; /* Adjust margin as needed */
-    text-align: center; /* Center text within the box */
+    padding: 10px;
+    margin-left: 10px; 
+    text-align: center; 
   }
   .colored-box input {
-    width: 60%; /* Adjust the width of the input box as needed */
-    padding: 2px; /* Adjust padding within the input box as needed */
+    width: 60%; 
+    padding: 2px; 
     
 }
 
@@ -245,14 +245,14 @@ a {
 
 .btn-save{
     color: rgb(0, 0, 0);
-    margin-top: 5rem; /* Push the button to the bottom */
+    margin-top: 5rem;
     margin-right: 0.2rem;
     background: rgb(42, 190, 249);
 }
 
 .btn-cancel{
     color: rgb(0, 0, 0);
-    margin-top: 5rem; /* Push the button to the bottom */
+    margin-top: 5rem; 
     margin-right: 0.2rem;
     background: rgb(249, 249, 249);
 }
