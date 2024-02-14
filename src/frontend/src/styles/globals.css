@@ -36,6 +36,29 @@ a {
     transition: all 0.3s ease-in-out;
 }
 
+.gray-box {
+    display: flex;
+    justify-content: space-around;
+    background-color: #ccc; 
+    padding: 10px; 
+  }
+
+
+  .colored-box {
+    width: 150px; /* Adjust the width as needed */
+    height: 75px; /* Set height to match width for squares */
+    background-color: rgb(231, 151, 151);
+    border: 1px solid #aaa;
+    padding: 10px; /* Adjust padding as needed */
+    margin-left: 10px; /* Adjust margin as needed */
+    text-align: center; /* Center text within the box */
+  }
+  .colored-box input {
+    width: 60%; /* Adjust the width of the input box as needed */
+    padding: 2px; /* Adjust padding within the input box as needed */
+    
+}
+
 .filter-btn {
     background: rgb(0, 143, 5);
     margin: 1rem;
@@ -209,6 +232,30 @@ a {
     opacity: .75 !important;
 }
 
+.btn-Mrubric{
+    color: rgb(0, 0, 0);
+    margin-left: 0.2rem;
+    background: rgb(200, 197, 197);
+}
+
+.btn-RunAG{
+    margin-left: 0.2rem;
+    background: rgb(249, 42, 42);
+}
+
+.btn-save{
+    color: rgb(0, 0, 0);
+    margin-top: 5rem; /* Push the button to the bottom */
+    margin-right: 0.2rem;
+    background: rgb(42, 190, 249);
+}
+
+.btn-cancel{
+    color: rgb(0, 0, 0);
+    margin-top: 5rem; /* Push the button to the bottom */
+    margin-right: 0.2rem;
+    background: rgb(249, 249, 249);
+}
 .time-select {
     background-color: rgb(210, 208, 208);
 }
