@@ -20,10 +20,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.List;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+
 
 
 @SpringBootTest
@@ -32,6 +33,11 @@ public class TimeConfigControllerTest {
         
     @Autowired
     private MockMvc mockMvc;
+    @Autowired private TimeConfigController controller;
+
+    @Test void contextLoads() throws Exception {
+        assertNotNull(controller);
+    }
 
     @Test
     void updateTimeConfig() throws Exception {
@@ -39,6 +45,8 @@ public class TimeConfigControllerTest {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+        
 
         
         LocalTime startTime = LocalTime.of(8, 30);
@@ -60,7 +68,7 @@ public class TimeConfigControllerTest {
                 .contentType("application/json")
                 .content(mapper.writeValueAsString(testCourseInfo)))
                 
-                .andExpect(status().isOk());
+                .andExpect(status().isOk()).andDo(print());
 
         
         mockMvc.perform(get("/timeConfig/1234"))
@@ -70,6 +78,7 @@ public class TimeConfigControllerTest {
                 .andExpect(jsonPath("$.endIn").value(mapper.writeValueAsString(expectedEndIn)))
                 .andExpect(jsonPath("$.endLate").value(mapper.writeValueAsString(expectedEndLate)))
                 .andExpect(jsonPath("$.beginOut").value(mapper.writeValueAsString(expectedBeginOut)))
-                .andExpect(jsonPath("$.endOut").value(mapper.writeValueAsString(expectedEndOut)));
+                .andExpect(jsonPath("$.endOut").value(mapper.writeValueAsString(expectedEndOut)))
+                .andDo(print());
     }
 }
