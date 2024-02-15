@@ -6,26 +6,31 @@ import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import com.ams.restapi.courseInfo.CourseInfo;
+import edu.ksu.canvas.interfaces.CourseReader;
+import edu.ksu.canvas.interfaces.EnrollmentReader;
+import edu.ksu.canvas.model.Course;
+import edu.ksu.canvas.model.Enrollment;
+import edu.ksu.canvas.requestOptions.GetEnrollmentOptions;
+import edu.ksu.canvas.requestOptions.ListCurrentUserCoursesOptions;
+import edu.ksu.canvas.requestOptions.ListUserCoursesOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.ams.restapi.courseInfo.CourseInfo;
 import com.ams.restapi.courseInfo.CourseInfoRepository;
 
 import edu.ksu.canvas.CanvasApiFactory;
-import edu.ksu.canvas.interfaces.EnrollmentReader;
-import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.oauth.NonRefreshableOauthToken;
 import edu.ksu.canvas.oauth.OauthToken;
-import edu.ksu.canvas.requestOptions.GetEnrollmentOptions;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 
 @Component
-public class CanvasSectionRefresher {
+public class CanvasCourseAndUserRefresher {
     @Autowired
     UserRepository userRepository;
 
@@ -46,27 +51,33 @@ public class CanvasSectionRefresher {
 
     @Scheduled(fixedRate = 360000)
     @Transactional
-    public void updateUserSections() throws IOException {
-        List<CourseInfo> sectionList = parseCSV("sections.csv");
-        EnrollmentReader sectionReader = API.getReader(EnrollmentReader.class, TOKEN);
-    
-        for (CourseInfo section : sectionList) {
-            Long courseId = section.getCourseId();
-            List<Enrollment> sections = sectionReader.getSectionEnrollments(new GetEnrollmentOptions(String.valueOf(courseId)));
-    
-            for (Enrollment enrollment : sections) {
-                String email = enrollment.getUser().getLoginId();
-                String name = enrollment.getUser().getName(); 
+    public void updateCoursesAndUsers() throws IOException {
 
-                User user = userService.findOrCreateUser(email, name);
-    
-                Role.RoleType roleType = getRoleTypeFromCanvasEnrollment(enrollment.getType());
-                Role role = roleRepository.findByRole(roleType)
-                    .orElseThrow(() -> new RuntimeException("Role not found"));
-                role = entityManager.merge(role);
-                user.getRoles().add(role);
-    
-                userRepository.save(user);
+        CourseReader courseReader = API.getReader(CourseReader.class, TOKEN);
+        EnrollmentReader courseEnrollmentReader = API.getReader(EnrollmentReader.class, TOKEN);
+        List<Course> courseList = courseReader.listCurrentUserCourses(new ListCurrentUserCoursesOptions());
+        for(Course course : courseList){
+            if(course.getStartAt() != null && course.getStartAt().after(new Date(1704783600L))){
+                courseInfoRepository.save(
+                    new CourseInfo(course.getId(), course.getCourseCode(), "COOR170", null,
+                            LocalTime.of(12, 15), LocalTime.of(13,  5)));
+                Long courseId = course.getId();
+                List<Enrollment> courseEnrollments = courseEnrollmentReader.getCourseEnrollments(new GetEnrollmentOptions(String.valueOf(courseId)));
+
+                for (Enrollment enrollment : courseEnrollments) {
+                    String email = enrollment.getUser().getLoginId();
+                    String name = enrollment.getUser().getName();
+
+                    User user = userService.findOrCreateUser(email, name);
+
+                    Role.RoleType roleType = getRoleTypeFromCanvasEnrollment(enrollment.getType());
+                    Role role = roleRepository.findByRole(roleType)
+                            .orElseThrow(() -> new RuntimeException("Role not found"));
+                    role = entityManager.merge(role);
+                    user.getRoles().add(role);
+
+                    userRepository.save(user);
+                }
             }
         }
     }
@@ -82,7 +93,7 @@ public class CanvasSectionRefresher {
         }
     }
 
-    public List<CourseInfo> parseCSV(String filePath) {
+    /*public List<CourseInfo> parseCSV(String filePath) {
         List<CourseInfo> sections = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -96,5 +107,5 @@ public class CanvasSectionRefresher {
             e.printStackTrace();
         }
         return sections;
-    }
+    }*/
 }

@@ -17,7 +17,7 @@ public class DataInitializer {
     private RoleRepository roleRepository;
 
     @Autowired
-    private CanvasSectionRefresher canvasSectionRefresher;
+    private CanvasCourseAndUserRefresher canvasSectionRefresher;
 
     @Autowired
     private AdminEmailService adminEmailService;
@@ -40,7 +40,7 @@ public class DataInitializer {
             }
             
             try{
-                canvasSectionRefresher.updateUserSections();
+                canvasSectionRefresher.updateCoursesAndUsers();
             } catch (IOException e) {
 
             }

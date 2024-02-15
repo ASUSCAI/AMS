@@ -4,12 +4,12 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import com.ams.restapi.authentication.CanvasSectionRefresher;
+import com.ams.restapi.authentication.CanvasCourseAndUserRefresher;
 
 public class GoogleOAuthTests {
     @Test 
     void TestSectionCode() throws IOException{
-        CanvasSectionRefresher test = new CanvasSectionRefresher();
-        test.updateUserSections();
+        CanvasCourseAndUserRefresher test = new CanvasCourseAndUserRefresher();
+        test.updateCoursesAndUsers();
     }
 }
