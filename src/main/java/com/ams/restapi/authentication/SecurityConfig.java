@@ -34,7 +34,7 @@ public class SecurityConfig {
                 auth.requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN");
                 auth.requestMatchers("/sections").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");
                 auth.requestMatchers(HttpMethod.POST, "/attendance").permitAll();
-                auth.requestMatchers(HttpMethod.GET, "/attendance").permitAll(); // TODO: temporary to allow for testing, REMOVE LATER
+                auth.requestMatchers(HttpMethod.GET, "/attendance").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");
                 auth.requestMatchers(HttpMethod.POST, "/readers").permitAll();
                 auth.requestMatchers(HttpMethod.GET, "/readers").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");
                 auth.requestMatchers(HttpMethod.PUT, "/readers").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");

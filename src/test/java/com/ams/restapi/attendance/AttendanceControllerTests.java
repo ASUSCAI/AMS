@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.security.test.context.support.WithMockUser;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -24,7 +25,9 @@ public class AttendanceControllerTests {
         assertNotNull(controller);
     }
 
-    @Test void shouldReturnCorrectPageSize() throws Exception {
+    @Test
+    @WithMockUser(roles="INSTRUCTOR")
+    void shouldReturnCorrectPageSize() throws Exception {
         mockMvc.perform(get("/attendance")
                 .param("room", "COOR170")
                 .param("date", "2024-01-11")
