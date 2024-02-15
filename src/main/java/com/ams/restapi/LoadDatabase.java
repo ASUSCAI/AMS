@@ -40,14 +40,14 @@ class LoadDatabase {
                 }
                 reader.close();
 
-                courseInfo.save(
+                /*courseInfo.save(
                     new CourseInfo(
-                        1234L, 1234L, "CSE110", "COOR170",
+                        85L, 77L, "CSE110", "COOR170",
                         List.of(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY),
                         LocalTime.of(12, 15), LocalTime.of(13,  5))
                 );
 
-                System.out.println(courseInfo.findById(1234L).get().getDefaultTimeConfig());
+                System.out.println(courseInfo.findById(85L).get().getDefaultTimeConfig());*/
 
                 // times.save(new TimeConfig(
                 //     1234L,
