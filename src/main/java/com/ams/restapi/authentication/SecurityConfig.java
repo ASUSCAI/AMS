@@ -39,10 +39,12 @@ public class SecurityConfig {
                 auth.requestMatchers(HttpMethod.GET, "/readers").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");
                 auth.requestMatchers(HttpMethod.PUT, "/readers").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");
                 auth.requestMatchers("/esp/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");
+                auth.requestMatchers("/timeConfig/**").permitAll(); // TODO: temporary to allow for testing, REMOVE LATER
                 auth.anyRequest().authenticated();
             })
             .csrf(csrf -> csrf
                 .ignoringRequestMatchers("/readers/**")
+                .ignoringRequestMatchers("/timeConfig/**")          //TODO: REMOVE LATER
             )
             .oauth2Login(oauth2 -> oauth2
                 .userInfoEndpoint(userInfo -> userInfo
