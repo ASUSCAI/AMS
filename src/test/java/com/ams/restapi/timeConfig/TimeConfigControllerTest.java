@@ -38,6 +38,13 @@ public class TimeConfigControllerTest {
         assertNotNull(controller);
     }
 
+    private String unwrapQuotes(String str) {
+        if (str.indexOf("\"") == 0 && str.lastIndexOf("\"") == str.length()-1)
+            return str.substring(1, str.length()-1);
+        else
+            throw new IllegalArgumentException("Not wrapped in double quotes");
+    }
+
     @Test
     void updateTimeConfig() throws Exception {
 
@@ -57,19 +64,33 @@ public class TimeConfigControllerTest {
         LocalTime expectedBeginOut = endTime.minusMinutes(CourseInfo.DEFAULT_TOLERANCE);
         LocalTime expectedEndOut = endTime.plusMinutes(CourseInfo.DEFAULT_TOLERANCE);
 
+        mockMvc.perform(put("/courseInfo/1234")
+                .contentType("application/json")
+                .content(mapper.writeValueAsString(testCourseInfo)))
+                .andExpect(status().isOk()).andDo(print());
+        
         mockMvc.perform(put("/timeConfig/1234")
                 .contentType("application/json")
                 .content(mapper.writeValueAsString(testCourseInfo)))
                 .andExpect(status().isOk()).andDo(print());
 
+                //new TimeConfig(
+                //     1234L,
+                //     LocalTime.of(7, 10),
+                //     LocalTime.of(7, 20),
+                //     LocalTime.of(7, 30),
+                //     LocalTime.of(8, 0),
+                //     LocalTime.of(, 20)));
+    
         mockMvc.perform(get("/timeConfig/1234"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.beginIn").value(mapper.writeValueAsString(expectedBeginIn)))
-                .andExpect(jsonPath("$.endIn").value(mapper.writeValueAsString(expectedEndIn)))
-                .andExpect(jsonPath("$.endLate").value(mapper.writeValueAsString(expectedEndLate)))
-                .andExpect(jsonPath("$.beginOut").value(mapper.writeValueAsString(expectedBeginOut)))
-                .andExpect(jsonPath("$.endOut").value(mapper.writeValueAsString(expectedEndOut)))
+                .andExpect(jsonPath("$.beginIn").value(unwrapQuotes(mapper.writeValueAsString(expectedBeginIn))))
+                .andExpect(jsonPath("$.endIn").value(unwrapQuotes(mapper.writeValueAsString(expectedEndIn))))
+                .andExpect(jsonPath("$.endLate").value(unwrapQuotes(mapper.writeValueAsString(expectedEndLate))))
+                .andExpect(jsonPath("$.beginOut").value(unwrapQuotes(mapper.writeValueAsString(expectedBeginOut))))
+                .andExpect(jsonPath("$.endOut").value(unwrapQuotes(mapper.writeValueAsString(expectedEndOut))))
                 .andDo(print());
+
     }
 }
