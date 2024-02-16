@@ -22,7 +22,7 @@ const SpecThresholdBox: React.FC<SpecThresholdBoxProps> = ({specificDate}) => {
   const [useDefault, setUseDefault] = useState(true);
   const [refreshSlider, doRefreshSlider] = useState(0);
 
-  const courseID = 1234;
+  const courseID = 85;
 
   // ----------- fetch specific time Config -------------
   // fetch default and specific, if no specific, copy from default

@@ -45,7 +45,7 @@ const ThresholdBox = () => {
   const [error, setError] = useState<BoundError>();
   const [refreshSlider, doRefreshSlider] = useState(0);
 
-  const courseID = 1234;
+  const courseID = 85;
 
   // ----------- fetch time Config -------------
   useEffect(() => {

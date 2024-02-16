@@ -25,7 +25,7 @@ const SectionConfig = () => {
   const days = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"];
   const daysLabel = ["M", "T", "W", "Th", "F"];
 
-  const courseID = 1234;
+  const courseID = 85;
 
   useEffect(() => {
     const fetchSectionConfig = async () => {

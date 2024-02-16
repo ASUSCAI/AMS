@@ -61,7 +61,7 @@ export class ConfigTray extends React.Component<ConfigTrayProps, ConfigTrayState
       >
         <View as="div" padding="medium">
           {this.renderCloseButton()}
-          <SpecConfigBox/>
+          {/*<SpecConfigBox/>*/}
           {/*<ThresholdBox/>*/}
           <SectionConfig/>
         </View>

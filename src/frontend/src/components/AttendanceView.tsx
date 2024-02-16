@@ -56,7 +56,7 @@ const AttendanceView = () => {
     const [sortBy, setSortBy] = useState<string>("time");
     const [sortType, setSortType] = useState<string>("asc");
     const page_size = [5, 10, 25, 50, 100];
-    const courseID = 1234;
+    const courseID = 85;
     const [currCourse, setCurrCourse] = useState<CourseInfo>();
 
     // State variables to store the selected values and update the table when "Go" button is clicked

@@ -34,16 +34,22 @@ task cleanStatic(type: Delete) {
 
 task buildFrontend(type: Exec) {
 	workingDir 'src/frontend'
-	commandLine 'npm.cmd', 'run', 'build'
+    if (System.properties['os.name'].toLowerCase().contains('windows')) {
+        println "Building frontend... (Windows)"
+        commandLine 'npm.cmd', 'run', 'build'
+    } else { // assume UNIX
+        println "Building frontend... (Unix)"
+        commandLine 'npm', 'run', 'build'
+    }
 }
 
 task setupFrontend(type: Exec){
 	workingDir 'src/frontend'
     if (System.properties['os.name'].toLowerCase().contains('windows')) {
-        println "Building frontend... (Windows)"
+        println "Installing frontend... (Windows)"
         commandLine 'npm.cmd', 'install'
     } else { // assume UNIX
-        println "Building frontend... (Unix)"
+        println "Installing frontend... (Unix)"
         commandLine 'npm', 'install'
     }
 }

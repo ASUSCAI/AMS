@@ -1,7 +1,6 @@
 import React, {useEffect, useState,} from "react";
 import ReactSlider from "react-slider";
 import {TimeConfig} from "@/components/ThresholdBox";
-import {is} from "immutable";
 
 function minutesToTime(minutes: number) {
   const hours = Math.floor(minutes / 60);
@@ -21,7 +20,6 @@ interface IntervalSliderProps {
 }
 
 const DateSlider: React.FC<IntervalSliderProps> = (props) => {
-  const [day, setDay] = useState<Date>(new Date(0));
   const [value, setValue] = useState([0, 30, 60])
   const [beginIn, setBeginIn] = useState(0);
   const [endOut, setEndOut] = useState(60);
@@ -30,8 +28,9 @@ const DateSlider: React.FC<IntervalSliderProps> = (props) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const getTimeStamp = (date: Date) => {
-      return (60 * date.getHours()) + date.getMinutes();
+    const getTimeStamp = (time: String) => {
+      let a = time.split(':');
+      return (+a[0]) * 60 + (+a[1]);
     }
     if (props.timeConfigData &&
       props.timeConfigData.beginIn &&
@@ -41,20 +40,15 @@ const DateSlider: React.FC<IntervalSliderProps> = (props) => {
       props.timeConfigData.endOut) {
       setLoading(true);
 
-      const beginInDate = new Date(props.timeConfigData.beginIn);
-      const endInDate = new Date(props.timeConfigData.endIn);
-      const endLateDate = new Date(props.timeConfigData.endLate);
-      const beginOutDate = new Date(props.timeConfigData.beginOut);
-      const endOutDate = new Date(props.timeConfigData.endOut);
-
-      setDay(new Date(beginInDate.toDateString()));
-      const beginInTimestamp = getTimeStamp(beginInDate);
-      const endOutTimestamp = getTimeStamp(endOutDate);
-      const valueTimestamps = [getTimeStamp(endInDate), getTimeStamp(endLateDate), getTimeStamp(beginOutDate)]
+      const beginInTimestamp = getTimeStamp(props.timeConfigData.beginIn);
+      const endOutTimestamp = getTimeStamp(props.timeConfigData.endOut);
+      const valueTimestamps = [getTimeStamp(props.timeConfigData.endIn), getTimeStamp(props.timeConfigData.endLate), getTimeStamp(props.timeConfigData.beginOut)]
 
       setBeginIn(beginInTimestamp);
       setEndOut(endOutTimestamp);
-      setLoading(false)
+      setLoading(false);
+      console.log(props.timeConfigData);
+      console.log(valueTimestamps);
       onSliderChange(valueTimestamps);
     }
   }, [props.timeConfigData, props.refresh, loading]);
@@ -65,13 +59,17 @@ const DateSlider: React.FC<IntervalSliderProps> = (props) => {
     }
     setValue(valueTimeStamps);
 
-    let dateValue = [];
+    let timeValue = [];
 
     for (let i = 0; i < valueTimeStamps.length; i++) {
-      dateValue.push((new Date(day.getTime() + valueTimeStamps[i] * 60000)).toISOString());
+      let h = Math.floor(valueTimeStamps[i] / 60);
+      let m = valueTimeStamps[i] % 60;
+      let hStr = h < 10 ? '0' + h : '' + h;
+      let mStr = m < 10 ? '0' + m : '' + m;
+      timeValue.push(`${hStr}:${mStr}`);
     }
 
-    props.onChange(dateValue);
+    props.onChange(timeValue);
   }
 
   const Thumb: React.FC<any> = (props, state) => {
@@ -112,7 +110,7 @@ const DateSlider: React.FC<IntervalSliderProps> = (props) => {
     );
   }
   return (
-    <div className={`slider-container ${props.disabled || day.getTime() === 0 ? "disabled" : ""}`}>
+    <div className={`slider-container ${props.disabled || loading ? "disabled" : ""}`}>
       <ReactSlider
         className="horizontal-slider"
         thumbClassName="thumb"
