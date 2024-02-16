@@ -39,20 +39,29 @@ a {
 .gray-box {
     display: flex;
     justify-content: space-around;
-    background-color: #ccc; 
+    align-items: center;
+    background-color: #f2f2f2;
+    border: 1px solid #DBDBDB;
+    border-radius: 10px;
     padding: 10px; 
   }
 
 
   .colored-box {
+    display: flex;
+    flex-direction: column; /* Aligns children (label and input) in a vertical stack */
+    justify-content: center; /* Centers items vertically in the container */
+    align-items: center; /* Centers items horizontally in the container */
     width: 150px;
-    height: 75px; 
-    background-color: rgb(231, 151, 151);
+    height: 75px;
+    background-color: #C8C5C5;
     border: 1px solid #aaa;
     padding: 10px;
-    margin-left: 10px; 
-    text-align: center; 
-  }
+    margin: 10px; /* Adjusted for equal spacing around boxes */
+    text-align: center;
+    border-radius: 10px; /* Rounded edges for the box */
+}
+
   .colored-box input {
     width: 60%; 
     padding: 2px; 
