@@ -22,7 +22,7 @@ const Home: NextPage = () => {
       <AttendanceView/>
       <AutograderView/>
       <ConfigTray/>
-    
+      <PairTray/>
     </div>
   );
 };
