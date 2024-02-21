@@ -51,11 +51,11 @@ class LoadDatabase {
 
                 // times.save(new TimeConfig(
                 //     1234L,
-                //     LocalTime.of(7, 10),
-                //     LocalTime.of(7, 20),
-                //     LocalTime.of(7, 30),
-                //     LocalTime.of(8, 0),
-                //     LocalTime.of(, 20)));
+                //     LocalTime.of(12, 10),
+                //     LocalTime.of(12, 20),
+                //     LocalTime.of(12, 30),
+                //     LocalTime.of(13, 0),
+                //     LocalTime.of(13, 20)));
             };
         }
         return args -> {log.info("BEAN MODE DEACTIVATED");};
