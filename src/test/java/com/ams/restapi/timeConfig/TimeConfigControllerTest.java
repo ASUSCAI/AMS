@@ -58,11 +58,11 @@ public class TimeConfigControllerTest {
                 List.of(DayOfWeek.MONDAY),
                 startTime, endTime);
 
-        LocalTime expectedBeginIn = startTime.minusMinutes(CourseInfo.DEFAULT_TOLERANCE);
-        LocalTime expectedEndIn = startTime.plusMinutes(CourseInfo.DEFAULT_TOLERANCE);
-        LocalTime expectedEndLate = startTime.plusMinutes(CourseInfo.DEFAULT_LATE_TOLERANCE);
-        LocalTime expectedBeginOut = endTime.minusMinutes(CourseInfo.DEFAULT_TOLERANCE);
-        LocalTime expectedEndOut = endTime.plusMinutes(CourseInfo.DEFAULT_TOLERANCE);
+        // LocalTime expectedBeginIn = startTime.minusMinutes(CourseInfo.DEFAULT_TOLERANCE);
+        // LocalTime expectedEndIn = startTime.plusMinutes(CourseInfo.DEFAULT_TOLERANCE);
+        // LocalTime expectedEndLate = startTime.plusMinutes(CourseInfo.DEFAULT_LATE_TOLERANCE);
+        // LocalTime expectedBeginOut = endTime.minusMinutes(CourseInfo.DEFAULT_TOLERANCE);
+        // LocalTime expectedEndOut = endTime.plusMinutes(CourseInfo.DEFAULT_TOLERANCE);
 
         mockMvc.perform(put("/courseInfo/1234")
         .contentType("application/json")
