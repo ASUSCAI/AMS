@@ -52,19 +52,23 @@ public class SecurityConfig {
                 auth.requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN");
                 auth.requestMatchers("/sections").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");
                 auth.requestMatchers(HttpMethod.POST, "/attendance").permitAll();
-                auth.requestMatchers(HttpMethod.GET, "/attendance").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");
+                auth.requestMatchers(HttpMethod.GET, "/attendance").permitAll(); // TODO: temporary to allow for testing, REMOVE LATER
+                auth.requestMatchers(HttpMethod.PUT, "/timeConfig/**").permitAll(); // TODO: temporary to allow for testing, REMOVE LATER
+                auth.requestMatchers(HttpMethod.GET, "/timeConfig/**").permitAll(); // TODO: temporary to allow for testing, REMOVE LATER
+                auth.requestMatchers(HttpMethod.PUT, "/courseInfo/**").permitAll(); // TODO: temporary to allow for testing, REMOVE LATER
+                auth.requestMatchers(HttpMethod.GET, "/courseInfo/**").permitAll(); // TODO: temporary to allow for testing, REMOVE LATER
                 auth.requestMatchers(HttpMethod.POST, "/readers").permitAll();
                 auth.requestMatchers(HttpMethod.GET, "/readers").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");
                 auth.requestMatchers(HttpMethod.PUT, "/readers").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");
                 auth.requestMatchers("/esp/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");
-                auth.requestMatchers("/timeConfig/**").permitAll(); // TODO: temporary to allow for testing, REMOVE LATER
                 auth.anyRequest().authenticated();
             })
             .csrf(csrf -> csrf
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())  
                 .ignoringRequestMatchers("/readers/**")
-                .ignoringRequestMatchers("/timeConfig/**")          //TODO: REMOVE LATER
+                .ignoringRequestMatchers("/timeConfig/**")
+                .ignoringRequestMatchers("/courseInfo/**")
             )
             .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
             .oauth2Login(oauth2 -> oauth2
