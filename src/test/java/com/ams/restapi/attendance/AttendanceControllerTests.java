@@ -8,6 +8,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.security.test.context.support.WithMockUser;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -41,5 +43,14 @@ public class AttendanceControllerTests {
                 .andExpect(jsonPath("$.length()").value(10))
                 .andExpect(jsonPath("$[*].type").value(everyItem(equalTo("LEFT"))))
                 .andDo(print());
+    }
+    @Test
+    @WithMockUser(roles="INSTRUCTOR")
+    void deleteRcord() throws Exception {
+        mockMvc.perform(get("/attendance/{id}")).andExpect(status().isOk());
+        mockMvc.perform(delete("/attendance/{id}"));
+        mockMvc.perform(get("/attendance/{id}"))
+            .andExpect(status().isNotFound())
+            .andDo(print());
     }
 }
