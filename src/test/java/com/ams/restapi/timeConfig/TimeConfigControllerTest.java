@@ -85,11 +85,11 @@ public class TimeConfigControllerTest {
         mockMvc.perform(get("/timeConfig/1234"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.beginIn").value(unwrapQuotes(mapper.writeValueAsString(expectedBeginIn))))
-                .andExpect(jsonPath("$.endIn").value(unwrapQuotes(mapper.writeValueAsString(expectedEndIn))))
-                .andExpect(jsonPath("$.endLate").value(unwrapQuotes(mapper.writeValueAsString(expectedEndLate))))
-                .andExpect(jsonPath("$.beginOut").value(unwrapQuotes(mapper.writeValueAsString(expectedBeginOut))))
-                .andExpect(jsonPath("$.endOut").value(unwrapQuotes(mapper.writeValueAsString(expectedEndOut))))
+                .andExpect(jsonPath("$.beginIn").value(unwrapQuotes(mapper.writeValueAsString(updatedTimeConfig.getBeginIn()))))
+                .andExpect(jsonPath("$.endIn").value(unwrapQuotes(mapper.writeValueAsString(updatedTimeConfig.getEndIn()))))
+                .andExpect(jsonPath("$.endLate").value(unwrapQuotes(mapper.writeValueAsString(updatedTimeConfig.getEndLate()))))
+                .andExpect(jsonPath("$.beginOut").value(unwrapQuotes(mapper.writeValueAsString(updatedTimeConfig.getBeginOut()))))
+                .andExpect(jsonPath("$.endOut").value(unwrapQuotes(mapper.writeValueAsString(updatedTimeConfig.getEndOut()))))
                 .andDo(print());
 
     }
