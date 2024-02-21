@@ -65,8 +65,9 @@ public class TimeConfigControllerTest {
         LocalTime expectedEndOut = endTime.plusMinutes(CourseInfo.DEFAULT_TOLERANCE);
 
         mockMvc.perform(put("/courseInfo/1234")
-                .contentType("application/json")
-                .content(mapper.writeValueAsString(testCourseInfo)));
+        .contentType("application/json")
+        .content(mapper.writeValueAsString(testCourseInfo)))
+        .andExpect(status().isOk()).andDo(print());
 
         TimeConfig updatedTimeConfig = new TimeConfig(
                 testCourseInfo,
