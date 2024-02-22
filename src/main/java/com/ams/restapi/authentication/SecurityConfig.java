@@ -33,8 +33,12 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> {
                 auth.requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN");
                 auth.requestMatchers("/sections").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");
-                auth.requestMatchers(HttpMethod.POST, "/attendance").permitAll(); // TODO: needs to go away
+                auth.requestMatchers(HttpMethod.POST, "/attendance").permitAll();
                 auth.requestMatchers(HttpMethod.GET, "/attendance").permitAll(); // TODO: temporary to allow for testing, REMOVE LATER
+                auth.requestMatchers(HttpMethod.PUT, "/timeConfig/**").permitAll(); // TODO: temporary to allow for testing, REMOVE LATER
+                auth.requestMatchers(HttpMethod.GET, "/timeConfig/**").permitAll(); // TODO: temporary to allow for testing, REMOVE LATER
+                auth.requestMatchers(HttpMethod.PUT, "/courseInfo/**").permitAll(); // TODO: temporary to allow for testing, REMOVE LATER
+                auth.requestMatchers(HttpMethod.GET, "/courseInfo/**").permitAll(); // TODO: temporary to allow for testing, REMOVE LATER
                 auth.requestMatchers(HttpMethod.POST, "/readers").permitAll();
                 auth.requestMatchers(HttpMethod.GET, "/readers").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");
                 auth.requestMatchers(HttpMethod.PUT, "/readers").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");
@@ -43,6 +47,8 @@ public class SecurityConfig {
             })
             .csrf(csrf -> csrf
                 .ignoringRequestMatchers("/readers/**")
+                .ignoringRequestMatchers("/timeConfig/**")
+                .ignoringRequestMatchers("/courseInfo/**")
             )
             .oauth2Login(oauth2 -> oauth2
                 .userInfoEndpoint(userInfo -> userInfo
