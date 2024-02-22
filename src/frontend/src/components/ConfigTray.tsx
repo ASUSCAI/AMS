@@ -47,27 +47,6 @@ export class ConfigTray extends React.Component<ConfigTrayProps, ConfigTrayState
   }
 
   render() {
-    const MemoizedTray = React.memo(() => (
-      <Tray
-        label="Tray Example"
-        open={this.state.open}
-        onDismiss={() => {
-          this.setState({open: false});
-        }}
-        shouldCloseOnDocumentClick={true}
-        transitionExit={true}
-        size="regular"
-        placement="end"
-      >
-        <View as="div" padding="medium">
-          {this.renderCloseButton()}
-          {/*<SpecConfigBox/>*/}
-          {/*<ThresholdBox/>*/}
-          <SectionConfig/>
-        </View>
-      </Tray>
-    ));
-    MemoizedTray.displayName = 'MemoizedTray';
 
     return (
       <div className="time-config-btn">
@@ -79,7 +58,24 @@ export class ConfigTray extends React.Component<ConfigTrayProps, ConfigTrayState
         >
           Show Time Config
         </Button>
-        <MemoizedTray/>
+        <Tray
+          label="Tray Example"
+          open={this.state.open}
+          onDismiss={() => {
+            this.setState({open: false});
+          }}
+          shouldCloseOnDocumentClick={false}
+          transitionExit={true}
+          size="regular"
+          placement="end"
+        >
+          <View as="div" padding="medium">
+            {this.renderCloseButton()}
+            <SpecConfigBox/>
+            {/*<ThresholdBox/>*/}
+            <SectionConfig/>
+          </View>
+        </Tray>
       </div>
     );
   }

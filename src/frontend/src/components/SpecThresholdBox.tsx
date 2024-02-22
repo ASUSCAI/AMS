@@ -53,10 +53,12 @@ const SpecThresholdBox: React.FC<SpecThresholdBoxProps> = ({specificDate}) => {
       try {
         const res = await axios.get(process.env.NEXT_PUBLIC_URL + "/timeConfig/" + courseID);
         const config = res.data as TimeConfig;
+        console.log(config);
         const updatedConfig = Object.fromEntries(
           Object.entries(config).map(([key, value]) => [
             key,
-            typeof value === "string" ? formatTimeToISODate(value) : value,
+            // typeof value === "string" ? formatTimeToISODate(value) : value,
+            value,
           ])
         ) as TimeConfig;
 
@@ -114,24 +116,33 @@ const SpecThresholdBox: React.FC<SpecThresholdBoxProps> = ({specificDate}) => {
   };
   const handleSave = () => {
     setTimeConfigData(inputConfigData);
+    // const updateTimeConfig = async () => {
+    //   const updatedConfig: TimeConfig = {
+    //     id: inputConfigData ? inputConfigData.id : undefined,
+    //     beginIn: inputConfigData
+    //       ? retrieveTimeFromISODate(inputConfigData.beginIn)
+    //       : undefined,
+    //     endIn: inputConfigData
+    //       ? retrieveTimeFromISODate(inputConfigData.endIn)
+    //       : undefined,
+    //     endLate: inputConfigData
+    //       ? retrieveTimeFromISODate(inputConfigData.endLate)
+    //       : undefined,
+    //     beginOut: inputConfigData
+    //       ? retrieveTimeFromISODate(inputConfigData.beginOut)
+    //       : undefined,
+    //     endOut: inputConfigData
+    //       ? retrieveTimeFromISODate(inputConfigData.endOut)
+    //       : undefined,
+    //   };
     const updateTimeConfig = async () => {
       const updatedConfig: TimeConfig = {
-        id: inputConfigData ? inputConfigData.id : undefined,
-        beginIn: inputConfigData
-          ? retrieveTimeFromISODate(inputConfigData.beginIn)
-          : undefined,
-        endIn: inputConfigData
-          ? retrieveTimeFromISODate(inputConfigData.endIn)
-          : undefined,
-        endLate: inputConfigData
-          ? retrieveTimeFromISODate(inputConfigData.endLate)
-          : undefined,
-        beginOut: inputConfigData
-          ? retrieveTimeFromISODate(inputConfigData.beginOut)
-          : undefined,
-        endOut: inputConfigData
-          ? retrieveTimeFromISODate(inputConfigData.endOut)
-          : undefined,
+        id: inputConfigData?.id, // Ensured to be not undefined by the check
+        beginIn: inputConfigData?.beginIn,
+        endIn: inputConfigData?.endIn,
+        endLate: inputConfigData?.endLate,
+        beginOut: inputConfigData?.beginOut,
+        endOut: inputConfigData?.endOut,
       };
       const [date] = specificDate.toISOString().split("T");
 
