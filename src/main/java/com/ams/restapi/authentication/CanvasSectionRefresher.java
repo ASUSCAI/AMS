@@ -21,15 +21,11 @@ import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.oauth.NonRefreshableOauthToken;
 import edu.ksu.canvas.oauth.OauthToken;
 import edu.ksu.canvas.requestOptions.GetEnrollmentOptions;
-import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 
 @Component
 public class CanvasSectionRefresher {
-    private static final CanvasApiFactory API;
-    private static final OauthToken TOKEN;
-
     @Autowired
     UserRepository userRepository;
 
@@ -45,11 +41,8 @@ public class CanvasSectionRefresher {
     @Autowired
     UserService userService;
 
-    static{
-        Dotenv env = Dotenv.load();
-        API = new CanvasApiFactory(env.get("CANVAS_URL"));;
-        TOKEN = new NonRefreshableOauthToken(env.get("API_KEY"));
-    }
+    private static final CanvasApiFactory API = new CanvasApiFactory(System.getenv("AMS_CANVAS_URL"));;
+    private static final OauthToken TOKEN = new NonRefreshableOauthToken(System.getenv("AMS_CANVAS_API_TOKEN"));;
 
     @Scheduled(fixedRate = 360000)
     @Transactional
