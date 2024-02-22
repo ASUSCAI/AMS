@@ -47,9 +47,12 @@ public class AttendanceControllerTests {
     @Test
     @WithMockUser(roles="INSTRUCTOR")
     void deleteRcord() throws Exception {
-        mockMvc.perform(get("/attendance/{id}")).andExpect(status().isOk());
-        mockMvc.perform(delete("/attendance/{id}"));
-        mockMvc.perform(get("/attendance/{id}"))
+        mockMvc.perform(get("/attendance/25"))
+            .andExpect(status().isOk())
+            .andDo(print());
+        mockMvc.perform(delete("/attendance/25"))
+            .andDo(print());
+        mockMvc.perform(get("/attendance/25"))
             .andExpect(status().isNotFound())
             .andDo(print());
     }
