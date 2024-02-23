@@ -49,15 +49,10 @@ public class SecurityConfig {
         http
             .addFilterBefore(new CustomDeviceAuthenticationFilter(deviceService), UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(auth -> {
-                auth.requestMatchers("/").permitAll();
                 auth.requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN");
                 auth.requestMatchers("/sections").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");
                 auth.requestMatchers(HttpMethod.POST, "/attendance").permitAll();
-                auth.requestMatchers(HttpMethod.GET, "/attendance").permitAll(); // TODO: temporary to allow for testing, REMOVE LATER
-                auth.requestMatchers(HttpMethod.PUT, "/timeConfig/**").permitAll(); // TODO: temporary to allow for testing, REMOVE LATER
-                auth.requestMatchers(HttpMethod.GET, "/timeConfig/**").permitAll(); // TODO: temporary to allow for testing, REMOVE LATER
-                auth.requestMatchers(HttpMethod.PUT, "/courseInfo/**").permitAll(); // TODO: temporary to allow for testing, REMOVE LATER
-                auth.requestMatchers(HttpMethod.GET, "/courseInfo/**").permitAll(); // TODO: temporary to allow for testing, REMOVE LATER
+                auth.requestMatchers(HttpMethod.GET, "/attendance").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");
                 auth.requestMatchers(HttpMethod.POST, "/readers").permitAll();
                 auth.requestMatchers(HttpMethod.GET, "/readers").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");
                 auth.requestMatchers(HttpMethod.PUT, "/readers").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");
@@ -68,8 +63,6 @@ public class SecurityConfig {
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())  
                 .ignoringRequestMatchers("/readers/**")
-                .ignoringRequestMatchers("/timeConfig/**")
-                .ignoringRequestMatchers("/courseInfo/**")
             )
             .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
             .oauth2Login(oauth2 -> oauth2
