@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.ams.restapi.courseInfo.CourseInfo;
@@ -46,6 +47,7 @@ public class TimeConfigControllerTest {
     }
 
     @Test
+    @WithMockUser(roles="INSTRUCTOR")
     void updateTimeConfig() throws Exception {
 
         ObjectMapper mapper = new ObjectMapper();
@@ -64,7 +66,7 @@ public class TimeConfigControllerTest {
         // LocalTime expectedBeginOut = endTime.minusMinutes(CourseInfo.DEFAULT_TOLERANCE);
         // LocalTime expectedEndOut = endTime.plusMinutes(CourseInfo.DEFAULT_TOLERANCE);
 
-        mockMvc.perform(put("/courseInfo/1234")
+        mockMvc.perform(put("/courseInfo/1234").with(csrf())
         .contentType("application/json")
         .content(mapper.writeValueAsString(testCourseInfo)))
         .andExpect(status().isOk()).andDo(print());
