@@ -19,6 +19,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -47,7 +48,7 @@ public class TimeConfigControllerTest {
     }
 
     @Test
-    @WithMockUser(roles="INSTRUCTOR")
+    @WithMockUser(roles = "INSTRUCTOR")
     void updateTimeConfig() throws Exception {
 
         ObjectMapper mapper = new ObjectMapper();
@@ -60,16 +61,11 @@ public class TimeConfigControllerTest {
                 List.of(DayOfWeek.MONDAY),
                 startTime, endTime);
 
-        // LocalTime expectedBeginIn = startTime.minusMinutes(CourseInfo.DEFAULT_TOLERANCE);
-        // LocalTime expectedEndIn = startTime.plusMinutes(CourseInfo.DEFAULT_TOLERANCE);
-        // LocalTime expectedEndLate = startTime.plusMinutes(CourseInfo.DEFAULT_LATE_TOLERANCE);
-        // LocalTime expectedBeginOut = endTime.minusMinutes(CourseInfo.DEFAULT_TOLERANCE);
-        // LocalTime expectedEndOut = endTime.plusMinutes(CourseInfo.DEFAULT_TOLERANCE);
 
         mockMvc.perform(put("/courseInfo/1234").with(csrf())
-        .contentType("application/json")
-        .content(mapper.writeValueAsString(testCourseInfo)))
-        .andExpect(status().isOk()).andDo(print());
+                .contentType("application/json")
+                .content(mapper.writeValueAsString(testCourseInfo)))
+                .andExpect(status().isOk()).andDo(print());
 
         TimeConfig updatedTimeConfig = new TimeConfig(
                 testCourseInfo,
@@ -79,7 +75,8 @@ public class TimeConfigControllerTest {
                 LocalTime.of(8, 0),
                 LocalTime.of(8, 20));
 
-        mockMvc.perform(put("/timeConfig/1234")
+
+        mockMvc.perform(put("/timeConfig/1234").with(csrf())
                 .contentType("application/json")
                 .content(mapper.writeValueAsString(updatedTimeConfig)))
                 .andExpect(status().isOk()).andDo(print());
@@ -87,11 +84,16 @@ public class TimeConfigControllerTest {
         mockMvc.perform(get("/timeConfig/1234"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.beginIn").value(unwrapQuotes(mapper.writeValueAsString(updatedTimeConfig.getBeginIn()))))
-                .andExpect(jsonPath("$.endIn").value(unwrapQuotes(mapper.writeValueAsString(updatedTimeConfig.getEndIn()))))
-                .andExpect(jsonPath("$.endLate").value(unwrapQuotes(mapper.writeValueAsString(updatedTimeConfig.getEndLate()))))
-                .andExpect(jsonPath("$.beginOut").value(unwrapQuotes(mapper.writeValueAsString(updatedTimeConfig.getBeginOut()))))
-                .andExpect(jsonPath("$.endOut").value(unwrapQuotes(mapper.writeValueAsString(updatedTimeConfig.getEndOut()))))
+                .andExpect(jsonPath("$.beginIn")
+                        .value(unwrapQuotes(mapper.writeValueAsString(updatedTimeConfig.getBeginIn()))))
+                .andExpect(jsonPath("$.endIn")
+                        .value(unwrapQuotes(mapper.writeValueAsString(updatedTimeConfig.getEndIn()))))
+                .andExpect(jsonPath("$.endLate")
+                        .value(unwrapQuotes(mapper.writeValueAsString(updatedTimeConfig.getEndLate()))))
+                .andExpect(jsonPath("$.beginOut")
+                        .value(unwrapQuotes(mapper.writeValueAsString(updatedTimeConfig.getBeginOut()))))
+                .andExpect(jsonPath("$.endOut")
+                        .value(unwrapQuotes(mapper.writeValueAsString(updatedTimeConfig.getEndOut()))))
                 .andDo(print());
 
     }
