@@ -25,7 +25,7 @@ import {DateSelect} from "./DateSelect";
 
 
 const AutograderView = () => {
-   
+    
     const {currentDate, setCurrentDate} = useContext<DateContextType>(DateContext);
    
 
@@ -53,7 +53,7 @@ const AutograderView = () => {
 
         console.log("Save button clicked");
     };
- 
+
 
 
    
@@ -63,6 +63,7 @@ const AutograderView = () => {
 
     // @ts-ignore
     return (
+        <div className="mx-32 border border-gray-300 rounded-lg">
         <div className="mx-32">
         <DateSelect
           currentDate={currentDate}
@@ -130,7 +131,7 @@ const AutograderView = () => {
       
 
         </div>
-       
+        </div>
         
     );
 };
