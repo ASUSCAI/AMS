@@ -1,17 +1,17 @@
-package com.ams.restapi.courseInfo;
+package com.ams.restapi.sectionInfo;
+
+import com.ams.restapi.timeConfig.TimeConfigDTO;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.List;
 
-import com.ams.restapi.timeConfig.TimeConfigDTO;
-
-public class CourseInfoDTO {
+public class SectionInfoDTO {
     private String name, room;
     private List<DayOfWeek> daysOfWeek;
     private LocalTime startTime, endTime;
     private TimeConfigDTO defaultTimeConfig;
-    
+
     public TimeConfigDTO getDefaultTimeConfig() {
         return defaultTimeConfig;
     }
@@ -20,15 +20,16 @@ public class CourseInfoDTO {
         this.defaultTimeConfig = defaultTimeConfig;
     }
 
-    public CourseInfoDTO() {}
+    public SectionInfoDTO() {
+    }
 
-    public CourseInfoDTO(CourseInfo courseInfo) {
-        name = courseInfo.getName();
-        room = courseInfo.getRoom();
-        startTime = courseInfo.getStartTime();
-        endTime = courseInfo.getEndTime();
-        daysOfWeek = courseInfo.getDaysOfWeek();
-        defaultTimeConfig = new TimeConfigDTO(courseInfo.getDefaultTimeConfig());
+    public SectionInfoDTO(SectionInfo sectionInfo) {
+        name = sectionInfo.getName();
+        room = sectionInfo.getRoom();
+        startTime = sectionInfo.getStartTime();
+        endTime = sectionInfo.getEndTime();
+        daysOfWeek = sectionInfo.getDaysOfWeek();
+        defaultTimeConfig = new TimeConfigDTO(sectionInfo.getDefaultTimeConfig());
     }
 
     public String getName() {
@@ -71,15 +72,15 @@ public class CourseInfoDTO {
         this.endTime = endTime;
     }
 
-    public CourseInfo toEntity(Long courseID) {
-        CourseInfo course = new CourseInfo(courseID, name, room,
-            daysOfWeek, startTime, endTime, null);
+    public SectionInfo toEntity(Long courseID) {
+        SectionInfo course = new SectionInfo(courseID, name, room,
+                daysOfWeek, startTime, endTime, null);
         if (defaultTimeConfig == null)
             course.setDefaultTimeConfig(
-                CourseInfo.getDefaultTimeConfig(course, startTime, endTime));
+                    SectionInfo.getDefaultTimeConfig(course, startTime, endTime));
         else
             course.setDefaultTimeConfig(defaultTimeConfig.toEntity(course));
         return course;
     }
-    
+
 }

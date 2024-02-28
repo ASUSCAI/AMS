@@ -1,26 +1,18 @@
-package com.ams.restapi.courseInfo;
+package com.ams.restapi.sectionInfo;
+
+import com.ams.restapi.timeConfig.DateSpecificTimeConfig;
+import com.ams.restapi.timeConfig.TimeConfig;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ams.restapi.timeConfig.DateSpecificTimeConfig;
-// import com.ams.restapi.timeConfig.DateSpecificTimeConfig;
-import com.ams.restapi.timeConfig.TimeConfig;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-
 @Entity
-public class CourseInfo {
+public class SectionInfo {
 
     private static Long DEFAULT_TOLERANCE = 5L;
     private static Long DEFAULT_LATE_TOLERANCE = 15L;
@@ -56,10 +48,11 @@ public class CourseInfo {
         this.dateSpecificTimeConfigs = dateSpecificTimeConfigs;
     }
 
-    public CourseInfo() {}
+    public SectionInfo() {
+    }
 
-    public CourseInfo(Long id, String name, String room,
-            List<DayOfWeek> daysOfWeek, LocalTime startTime, LocalTime endTime) {
+    public SectionInfo(Long id, String name, String room,
+                       List<DayOfWeek> daysOfWeek, LocalTime startTime, LocalTime endTime) {
         this.id = id;
         this.name = name;
         this.room = room;
@@ -69,10 +62,10 @@ public class CourseInfo {
         defaultTimeConfig = getDefaultTimeConfig(this, startTime, endTime);
         dateSpecificTimeConfigs = new ArrayList<>();
     }
-    
-    public CourseInfo(Long id, String name, String room,
-            List<DayOfWeek> daysOfWeek, LocalTime startTime, LocalTime endTime,
-            TimeConfig defaultTimeConfig) {
+
+    public SectionInfo(Long id, String name, String room,
+                       List<DayOfWeek> daysOfWeek, LocalTime startTime, LocalTime endTime,
+                       TimeConfig defaultTimeConfig) {
         this.id = id;
         this.name = name;
         this.room = room;
@@ -83,13 +76,13 @@ public class CourseInfo {
         dateSpecificTimeConfigs = new ArrayList<>();
     }
 
-    public static TimeConfig getDefaultTimeConfig(CourseInfo course, LocalTime startTime, LocalTime endTime) {
+    public static TimeConfig getDefaultTimeConfig(SectionInfo course, LocalTime startTime, LocalTime endTime) {
         TimeConfig config = new TimeConfig(course,
-            startTime.minusMinutes(DEFAULT_TOLERANCE),
-            startTime.plusMinutes(DEFAULT_TOLERANCE),
-            startTime.plusMinutes(DEFAULT_LATE_TOLERANCE),
-            endTime.minusMinutes(DEFAULT_TOLERANCE),
-            endTime.plusMinutes(DEFAULT_TOLERANCE));
+                startTime.minusMinutes(DEFAULT_TOLERANCE),
+                startTime.plusMinutes(DEFAULT_TOLERANCE),
+                startTime.plusMinutes(DEFAULT_LATE_TOLERANCE),
+                endTime.minusMinutes(DEFAULT_TOLERANCE),
+                endTime.plusMinutes(DEFAULT_TOLERANCE));
 
         if (course.getDefaultTimeConfig() != null) config.setId(course.getDefaultTimeConfig().getId());
 
@@ -166,7 +159,7 @@ public class CourseInfo {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        CourseInfo other = (CourseInfo) obj;
+        SectionInfo other = (SectionInfo) obj;
         if (id == null) {
             if (other.id != null)
                 return false;

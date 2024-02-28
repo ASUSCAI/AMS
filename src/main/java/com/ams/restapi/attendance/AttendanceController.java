@@ -1,47 +1,30 @@
 package com.ams.restapi.attendance;
 
-import java.time.DateTimeException;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import javax.validation.Valid;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.ams.restapi.attendance.AttendanceRecord.AttendanceType;
-import com.ams.restapi.courseInfo.CourseInfoRepository;
+import com.ams.restapi.sectionInfo.SectionInfoRepository;
 import com.ams.restapi.timeConfig.DateSpecificTimeConfig;
 import com.ams.restapi.timeConfig.DateSpecificTimeRepository;
 import com.ams.restapi.timeConfig.TimeConfig;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.time.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 /**
@@ -50,16 +33,16 @@ import jakarta.persistence.criteria.Root;
  */
 @RestController
 class AttendanceController {
-    
+
     private final AttendanceRepository repository;
-    private final CourseInfoRepository courseInfo;
+    private final SectionInfoRepository courseInfo;
     private final DateSpecificTimeRepository dateConfigs;
 
     @PersistenceContext
     private EntityManager eManager;
-    
+
     AttendanceController(AttendanceRepository repository,
-        CourseInfoRepository courseInfo, DateSpecificTimeRepository dateConfigs) {
+                         SectionInfoRepository courseInfo, DateSpecificTimeRepository dateConfigs) {
         this.repository = repository;
         this.courseInfo = courseInfo;
         this.dateConfigs = dateConfigs;

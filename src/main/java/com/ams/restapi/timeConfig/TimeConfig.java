@@ -1,19 +1,19 @@
 package com.ams.restapi.timeConfig;
 
-import java.time.LocalTime;
-
-import com.ams.restapi.courseInfo.CourseInfo;
+import com.ams.restapi.sectionInfo.SectionInfo;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 
+import java.time.LocalTime;
+
 @Entity
 public class TimeConfig {
 
-    private @Id @GeneratedValue Long id;
+    private @Id
+    @GeneratedValue Long id;
 
     public Long getId() {
         return id;
@@ -31,20 +31,21 @@ public class TimeConfig {
 
     @JsonBackReference
     @OneToOne(mappedBy = "defaultTimeConfig")
-    private CourseInfo course;
-    
-    public CourseInfo getCourse() {
+    private SectionInfo course;
+
+    public SectionInfo getCourse() {
         return course;
     }
 
-    public void setCourse(CourseInfo course) {
+    public void setCourse(SectionInfo course) {
         this.course = course;
     }
 
-    public TimeConfig() {}
+    public TimeConfig() {
+    }
 
-    public TimeConfig(CourseInfo course, LocalTime beginIn, LocalTime endIn,
-            LocalTime endLate, LocalTime beginOut, LocalTime endOut) {
+    public TimeConfig(SectionInfo course, LocalTime beginIn, LocalTime endIn,
+                      LocalTime endLate, LocalTime beginOut, LocalTime endOut) {
         this.course = course;
         this.beginIn = beginIn;
         this.endIn = endIn;

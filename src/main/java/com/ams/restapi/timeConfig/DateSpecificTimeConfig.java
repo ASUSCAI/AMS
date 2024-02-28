@@ -1,17 +1,10 @@
 package com.ams.restapi.timeConfig;
 
-import java.time.LocalDate;
-
-import com.ams.restapi.courseInfo.CourseInfo;
+import com.ams.restapi.sectionInfo.SectionInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import java.time.LocalDate;
 
 @Entity
 public class DateSpecificTimeConfig {
@@ -39,13 +32,13 @@ public class DateSpecificTimeConfig {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    private CourseInfo course;
-    
-    public CourseInfo getCourse() {
+    private SectionInfo course;
+
+    public SectionInfo getCourse() {
         return course;
     }
 
-    public void setCourse(CourseInfo course) {
+    public void setCourse(SectionInfo course) {
         this.course = course;
     }
 
@@ -62,8 +55,8 @@ public class DateSpecificTimeConfig {
     public DateSpecificTimeConfig() {
         System.out.println("JPA LOADED  ME");
     }
-    
-    public DateSpecificTimeConfig(CourseInfo course, LocalDate date, TimeConfig timeConfig) {
+
+    public DateSpecificTimeConfig(SectionInfo course, LocalDate date, TimeConfig timeConfig) {
         this.course = course;
         this.date = date;
         this.config = timeConfig;

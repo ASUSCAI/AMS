@@ -1,10 +1,9 @@
 package com.ams.restapi.timeConfig;
 
-import java.time.LocalTime;
+import com.ams.restapi.sectionInfo.SectionInfo;
 
 import javax.validation.constraints.NotNull;
-
-import com.ams.restapi.courseInfo.CourseInfo;
+import java.time.LocalTime;
 
 public class TimeConfigDTO {
     private Long id;
@@ -81,9 +80,9 @@ public class TimeConfigDTO {
         this.endOut = endOut;
     }
 
-    public TimeConfig toEntity(CourseInfo course) {
+    public TimeConfig toEntity(SectionInfo course) {
         return new TimeConfig(course, beginIn, endIn,
-            endLate, beginOut, endOut);
+                endLate, beginOut, endOut);
     }
     
 }

@@ -1,33 +1,26 @@
 package com.ams.restapi.authentication;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.time.DayOfWeek;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import com.ams.restapi.courseInfo.CourseInfo;
+import com.ams.restapi.sectionInfo.SectionInfo;
+import com.ams.restapi.sectionInfo.SectionInfoRepository;
+import edu.ksu.canvas.CanvasApiFactory;
 import edu.ksu.canvas.interfaces.CourseReader;
 import edu.ksu.canvas.interfaces.EnrollmentReader;
 import edu.ksu.canvas.model.Course;
 import edu.ksu.canvas.model.Enrollment;
+import edu.ksu.canvas.oauth.NonRefreshableOauthToken;
+import edu.ksu.canvas.oauth.OauthToken;
 import edu.ksu.canvas.requestOptions.GetEnrollmentOptions;
 import edu.ksu.canvas.requestOptions.ListCurrentUserCoursesOptions;
-import edu.ksu.canvas.requestOptions.ListUserCoursesOptions;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.ams.restapi.courseInfo.CourseInfoRepository;
-
-import edu.ksu.canvas.CanvasApiFactory;
-import edu.ksu.canvas.oauth.NonRefreshableOauthToken;
-import edu.ksu.canvas.oauth.OauthToken;
-import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
+import java.io.IOException;
+import java.time.LocalTime;
+import java.util.Date;
+import java.util.List;
 
 @Component
 public class CanvasCourseAndUserRefresher {
@@ -38,7 +31,7 @@ public class CanvasCourseAndUserRefresher {
     RoleRepository roleRepository;
 
     @Autowired
-    CourseInfoRepository courseInfoRepository;
+    SectionInfoRepository sectionInfoRepository;
 
     @Autowired
     private EntityManager entityManager;
@@ -56,11 +49,11 @@ public class CanvasCourseAndUserRefresher {
         CourseReader courseReader = API.getReader(CourseReader.class, TOKEN);
         EnrollmentReader courseEnrollmentReader = API.getReader(EnrollmentReader.class, TOKEN);
         List<Course> courseList = courseReader.listCurrentUserCourses(new ListCurrentUserCoursesOptions());
-        for(Course course : courseList){
-            if(course.getStartAt() != null && course.getStartAt().after(new Date(1704783600L))){
-                courseInfoRepository.save(
-                    new CourseInfo(course.getId(), course.getCourseCode(), "COOR170", null,
-                            LocalTime.of(12, 15), LocalTime.of(13,  5)));
+        for(Course course : courseList) {
+            if (course.getStartAt() != null && course.getStartAt().after(new Date(1704783600L))) {
+                sectionInfoRepository.save(
+                        new SectionInfo(course.getId(), course.getCourseCode(), "COOR170", null,
+                                LocalTime.of(12, 15), LocalTime.of(13, 5)));
                 Long courseId = course.getId();
                 List<Enrollment> courseEnrollments = courseEnrollmentReader.getCourseEnrollments(new GetEnrollmentOptions(String.valueOf(courseId)));
 
