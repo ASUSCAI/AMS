@@ -63,8 +63,8 @@ const AutograderView = () => {
 
     // @ts-ignore
     return (
-        <div className="mx-32 border border-gray-300 rounded-lg">
-        <div className="mx-32">
+        // <div className="mx-32 border border-gray-300 rounded-lg">
+        <div className="autograder">
         <DateSelect
           currentDate={currentDate}
           setCurrentDate={setCurrentDate}
@@ -95,7 +95,7 @@ const AutograderView = () => {
         <input type="text"/>
         </div>
         <div className="colored-box red">
-        <label>Absent</label>
+        <label>Absent </label>
         <input type="text" />
         </div>
         <View display="inline-block" padding="small" height="8rem">
@@ -131,7 +131,7 @@ const AutograderView = () => {
       
 
         </div>
-        </div>
+        // </div>
         
     );
 };
