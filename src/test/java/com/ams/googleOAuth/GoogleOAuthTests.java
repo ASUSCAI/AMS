@@ -1,10 +1,9 @@
 package com.ams.googleOAuth;
 
-import java.io.IOException;
-
+import com.ams.restapi.authentication.CanvasCourseAndUserRefresher;
 import org.junit.jupiter.api.Test;
 
-import com.ams.restapi.authentication.CanvasCourseAndUserRefresher;
+import java.io.IOException;
 
 public class GoogleOAuthTests {
     @Test 

@@ -1,18 +1,17 @@
 package com.ams.restapi.timeConfig;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Optional;
-
+import com.ams.restapi.sectionInfo.SectionInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.ams.restapi.courseInfo.CourseInfo;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Optional;
 
 public interface DateSpecificTimeRepository
         extends JpaRepository<DateSpecificTimeConfig, Long> {
-    Optional<DateSpecificTimeConfig> findByCourseAndDate(CourseInfo course, LocalDate date);
+    Optional<DateSpecificTimeConfig> findByCourseAndDate(SectionInfo course, LocalDate date);
 
     @Query("SELECT c.config FROM DateSpecificTimeConfig c "
     + "inner join c.course cour "

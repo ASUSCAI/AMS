@@ -1,11 +1,10 @@
 package com.ams.restapi.authentication;
 
-import java.io.IOException;
-
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import jakarta.annotation.PostConstruct;
+import java.io.IOException;
 
 @Component
 public class DataInitializer {
