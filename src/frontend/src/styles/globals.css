@@ -35,6 +35,15 @@ a {
     cursor: pointer;
     transition: all 0.3s ease-in-out;
 }
+.autograder{
+    border: 1px solid #DBDBDB;
+    margin-left: 1%;
+    margin-right: 1%; 
+    margin-top: 5%;
+    margin-bottom: 5%;
+    border-radius: 10px;
+
+}
 
 .gray-box {
     display: flex;
@@ -43,29 +52,31 @@ a {
     background-color: #f2f2f2;
     border: 1px solid #DBDBDB;
     border-radius: 10px;
-    padding: 10px; 
+    padding: 1rem;
+    margin: 2%; 
   }
 
 
   .colored-box {
     display: flex;
-    flex-direction: column; /* Aligns children (label and input) in a vertical stack */
+    flex-direction: row; /* Aligns children (label and input) in a vertical stack */
     justify-content: center; /* Centers items vertically in the container */
     align-items: center; /* Centers items horizontally in the container */
-    width: 150px;
-    height: 75px;
+    width: 15%;
+    height: 15%;
     background-color: #fffdfd;
     border: 1px solid #aaa;
     padding: 10px;
     margin: 10px; /* Adjusted for equal spacing around boxes */
-    text-align: center;
+    text-align: left;
     border-radius: 10px; /* Rounded edges for the box */
 }
 
   .colored-box input {
-    width: 60%; 
+    width: 50%; 
     height: 50%;
     padding: 2px;
+    margin-left: 5%;
     border: 1px solid #aaa
     
 }
@@ -245,8 +256,9 @@ a {
 
 .btn-Mrubric{
     color: rgb(0, 0, 0);
-    margin-left: 0.2rem;
+    margin-left: 0.2rem; 
     background: rgb(200, 197, 197);
+
 }
 
 .btn-RunAG{
@@ -257,14 +269,14 @@ a {
 .btn-save{
     color: rgb(0, 0, 0);
     margin-top: 5rem;
-    margin-right: 0.2rem;
+    /* margin-right: 0.2rem; */
     background: rgb(42, 190, 249);
 }
 
 .btn-cancel{
     color: rgb(0, 0, 0);
     margin-top: 5rem; 
-    margin-right: 0.2rem;
+    /* margin-right: 0.2rem; */
     background: rgb(249, 249, 249);
 }
 .time-select {
@@ -576,7 +588,7 @@ a {
 }
 
 .spec-btn-sect {
-    /* background-color: red; */
+     /* background-color: red;  */
     display: flex;
     flex-direction: row;
     justify-content: space-between;
