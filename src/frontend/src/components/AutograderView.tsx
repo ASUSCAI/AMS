@@ -124,8 +124,8 @@ const AutograderView = () => {
 
 
     return (
-        <div className="mx-32 border border-gray-300 rounded-lg">
-        <div className="mx-32">
+        <div className="mx-0.5 border border-gray-300 rounded-lg">
+        <div className="mx-0.5">
         <DateSelect
           currentDate={currentDate}
           setCurrentDate={setCurrentDate}
@@ -136,7 +136,7 @@ const AutograderView = () => {
         
       
     
-        <View display="inline-block" padding="small" width="25rem">
+        <View display="inline-block" padding="small" width="1rem">
             <button
             className="filter-btn btn-Mrubric"
             onClick={handleModifyRubric}
@@ -173,22 +173,22 @@ const AutograderView = () => {
         disabled={!isEditable}
         onChange={handleInputChangeAbsent}/>
         </div>
-        <View display="inline-block" padding="small" height="8rem">
-            <button
-            className="filter-btn btn-cancel"
-            onClick={handleCancel}
-            disabled={!isEditable}
-            >
-            Cancel
-            </button>
-            <button
-            className="filter-btn btn-save"
-            onClick={handleSave}
-            disabled={!isEditable}
-            >
-            Save
-            </button>
-        </View>
+        <div style={{ display: 'inline-block', padding: 'small', height: '8rem' }}>
+      <button
+        className="filter-btn btn-cancel"
+        onClick={handleCancel}
+        disabled={!isEditable}
+      >
+        Cancel
+      </button>
+      <button
+        className="filter-btn btn-save"
+        onClick={handleSave}
+        disabled={!isEditable}
+      >
+        Save
+      </button>
+    </div>
     </div>
         
         

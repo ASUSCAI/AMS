@@ -52,8 +52,8 @@ a {
     flex-direction: column; /* Aligns children (label and input) in a vertical stack */
     justify-content: center; /* Centers items vertically in the container */
     align-items: center; /* Centers items horizontally in the container */
-    width: 150px;
-    height: 75px;
+    width: 65px;
+    height: 65px;
     background-color: #fffdfd;
     border: 1px solid #aaa;
     padding: 10px;
@@ -63,8 +63,8 @@ a {
 }
 
   .colored-box input {
-    width: 60%; 
-    height: 50%;
+    width: 75%; 
+    height: 80%;
     padding: 2px;
     border: 1px solid #aaa
     
@@ -72,7 +72,7 @@ a {
 
 .filter-btn {
     background: rgb(0, 143, 5);
-    margin: 1rem;
+    margin: 0.5rem;
     padding: 0.5rem;
     border: 1px solid black;
     border-radius: 0.25rem;
@@ -247,6 +247,8 @@ a {
     color: rgb(0, 0, 0);
     margin-left: 0.2rem;
     background: rgb(200, 197, 197);
+    width: 125px;
+    height: 45px;
 }
 
 .btn-RunAG{
