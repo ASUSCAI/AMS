@@ -673,3 +673,9 @@ a {
         opacity: 1;
     }
 }
+.disabled {
+    opacity: 0.5; 
+    filter: brightness(80%);
+    cursor: not-allowed; 
+    
+  }
