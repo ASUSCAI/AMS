@@ -279,6 +279,13 @@ a {
     /* margin-right: 0.2rem; */
     background: rgb(249, 249, 249);
 }
+
+.disabled {
+    opacity: 0.5; 
+    filter: brightness(80%);
+    cursor: not-allowed; 
+    
+  }
 .time-select {
     background-color: rgb(210, 208, 208);
 }
@@ -683,3 +690,10 @@ a {
         opacity: 1;
     }
 }
+
+.disabled {
+    opacity: 0.5; 
+    filter: brightness(80%);
+    cursor: not-allowed; 
+    
+  }
