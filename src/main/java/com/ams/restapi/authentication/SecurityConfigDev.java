@@ -17,7 +17,8 @@ public class SecurityConfigDev {
             .authorizeHttpRequests(auth -> {
                 auth.anyRequest().permitAll();
             })
-            .csrf().disable();
+            .csrf().disable()
+            .headers().frameOptions().disable();
         return http.build();
     }
 }
