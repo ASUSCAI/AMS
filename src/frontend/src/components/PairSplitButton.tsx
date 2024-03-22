@@ -26,7 +26,7 @@ export default function PairSplitButton() {
         (toast.current as any)?.show({
           severity: "success",
           summary: "Success",
-          detail: "Reader 1 Paired; Reader 1 is now Default Reader",
+          detail: "Reader 1 Paired - Reader 1 is now Default Reader",
           className: "toast-cont",
         });
       },
@@ -44,7 +44,7 @@ export default function PairSplitButton() {
         (toast.current as any)?.show({
           severity: "success",
           summary: "Success",
-          detail: "Reader 2 Paired; Reader 2 is now Default Reader",
+          detail: "Reader 2 Paired - Reader 2 is now Default Reader",
           className: "toast-cont",
           
         });
@@ -62,7 +62,7 @@ export default function PairSplitButton() {
         (toast.current as any)?.show({
           severity: "success",
           summary: "Success",
-          detail: "Reader 3 Paired; Reader 3 is now Default Reader",
+          detail: "Reader 3 Paired -  Reader 3 is now Default Reader",
           className: "toast-cont",
           
         });
@@ -81,7 +81,7 @@ export default function PairSplitButton() {
         (toast.current as any)?.show({
           severity: "success",
           summary: "Success",
-          detail: "Reader 4 Paired;\n Reader 4 is now Default Reader",
+          detail: "Reader 4 Paired - Reader 4 is now Default Reader",
           className: "toast-cont",
           
         });
@@ -104,12 +104,15 @@ export default function PairSplitButton() {
           severity: "success",
           summary: "Success",
           detail: defaultReader + " Paired",
+          className: "toast-cont",
         });
       } else {
         (toast.current as any)?.show({
           severity: "warn",
           summary: "No Default Reader",
           detail: "Select a Reader",
+          className: "toast-cont toast-pair-warn",
+          styleClass: "toast-icon",
         });
       }
     }
