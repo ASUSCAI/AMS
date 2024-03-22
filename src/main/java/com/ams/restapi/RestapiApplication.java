@@ -24,7 +24,8 @@ public class RestapiApplication {
 				registry.addMapping("/**")
                     .allowedOrigins("http://localhost:3000")
                     .allowedMethods("*")
-                    .exposedHeaders("Total-Pages");
+                    .exposedHeaders("Total-Pages")
+					.allowCredentials(true);
 			}
 		};
 	}
