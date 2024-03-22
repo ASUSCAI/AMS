@@ -605,6 +605,72 @@ a {
     background-color: rgb(94, 163, 210); /* Use any color of your choice for highlighting */
 }
 
+/* pair-split btn styles */
+.pair-btn {
+    position: absolute;
+    top: 1.5rem;
+    right: 13rem;
+    border-radius: 0.25rem;
+    width: 7rem;
+    
+    cursor: pointer;
+
+    border: 1px solid rgb(221, 221, 221);
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+    /* background-color: rgb(245, 245, 245); */
+    background-color: rgb(237, 70, 70);
+    color: white;
+
+    display: flex;
+    justify-content: space-between;
+}
+.pair-btn:hover {
+    background-color: rgb(220, 220, 220);
+    border-radius: 0.25rem;
+}
+.paired {
+    background-color: rgb(82, 188, 72); 
+    color: white;
+}
+.paired:hover {
+    background-color: rgb(71, 162, 62);
+    color: white;
+}
+.pair-menu-btn {
+    /* background-color: red; */
+    /* padding-left: 2rem; */
+    /* margin-left: 1.6rem; */
+    padding: 0.35rem 0.75rem;
+    box-shadow: 0 0 0 1px rgb(128, 128, 128, 0.15);
+    border-radius: 0 0.25rem 0.25rem 0;
+}
+.pair-menu-btn:hover {
+    background-color: rgb(200, 200, 200);
+    box-shadow: 0 0 0 1px rgb(128, 128, 128, 0.5);
+    border-radius: 0 0.25rem 0.25rem 0;
+}
+.paired-menu:hover{
+    background-color: rgb(57, 137, 50);
+}
+.pair-menu-dropdown{
+    /* background-color: #007bff; */
+    padding: 0.5rem;
+    text-align: center;
+    border: 1px solid black;
+}
+.toast-cont{
+    background-color: rgb(82, 188, 72);
+    color: whitesmoke;
+    padding: 1rem;
+}
+.pair-item{
+    padding: 0.25rem 0.1rem;
+}
+.pair-item:hover{
+    padding: 0.25rem 0.1rem;
+    background-color: rgb(229, 231, 235);
+}
+
 @keyframes tableRowAnimation {
     from {
         opacity: 0;

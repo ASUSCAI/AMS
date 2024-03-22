@@ -5,6 +5,8 @@ import type { NextPage } from "next";
 import AttendanceView from "@/components/AttendanceView";
 import { ConfigTray } from "@/components/ConfigTray";
 import { PairTray } from "@/components/PairTray";
+import SocketSTOMP from "@/components/SocketSTOMP";
+import PairSplitButton from "@/components/PairSplitButton";
 
 type CourseInfo = {
   // add more attributes moving forward
@@ -18,10 +20,11 @@ const Home: NextPage = () => {
 
   return (
     <div className="mt-20">
+      <PairSplitButton/>
       <AttendanceView/>
-      <PairTray/>
+      <SocketSTOMP/>
+      {/* <PairTray/> */}
       <ConfigTray/>
-      <PairTray/>
     </div>
   );
 };

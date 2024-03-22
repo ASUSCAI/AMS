@@ -16,4 +16,5 @@ public class WebSocketSecurityConfig {
     AuthorizationManager<Message<?>> messageAuthorizationManager(MessageMatcherDelegatingAuthorizationManager.Builder messages) {
         return AuthorityAuthorizationManager.hasAuthority("ROLE_ADMIN");
     }
+
 }
