@@ -36,7 +36,7 @@ const SocketSTOMP: React.FC = () => {
   const sendPing = () => {
     // Replace with actual readerId
     const readerId = 'some-reader-id';
-    fetch('/readers', {
+    fetch(process.env.NEXT_PUBLIC_URL+'/readers', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
