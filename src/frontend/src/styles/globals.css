@@ -618,14 +618,16 @@ a {
     border: 1px solid rgb(221, 221, 221);
     /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
     /* background-color: rgb(245, 245, 245); */
-    background-color: rgb(237, 70, 70);
+    background-color: rgb(243, 29, 29);
     color: white;
 
     display: flex;
     justify-content: space-between;
 }
 .pair-btn:hover {
-    background-color: rgb(220, 220, 220);
+    /* background-color: rgb(220, 220, 220);
+    color: black; */
+    background-color: rgb(217, 23, 23);
     border-radius: 0.25rem;
 }
 .paired {
@@ -645,7 +647,8 @@ a {
     border-radius: 0 0.25rem 0.25rem 0;
 }
 .pair-menu-btn:hover {
-    background-color: rgb(200, 200, 200);
+    /* background-color: rgb(200, 200, 200); */
+    background-color: rgb(176, 13, 13);
     box-shadow: 0 0 0 1px rgb(128, 128, 128, 0.5);
     border-radius: 0 0.25rem 0.25rem 0;
 }
@@ -659,9 +662,17 @@ a {
     border: 1px solid black;
 }
 .toast-cont{
-    background-color: rgb(82, 188, 72);
-    color: whitesmoke;
+    /* background-color: rgb(82, 188, 72); */
+    background-color: rgb(211, 232, 208);
+    color: rgb(65, 91, 60);
     padding: 1rem;
+}
+.toast-pair-warn {
+    background-color: rgb(252, 239, 193);
+    color: rgb(120, 99, 46);
+}
+.toast-icon {
+    padding: 2rem;
 }
 .pair-item{
     padding: 0.25rem 0.1rem;
