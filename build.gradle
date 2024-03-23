@@ -13,30 +13,81 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:3.1.4'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'io.projectreactor:reactor-core:3.5.8'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.security:spring-security-messaging'
+	implementation 'org.springframework.security:spring-security-oauth2-client'
+	implementation 'org.springframework.security:spring-security-oauth2-jose'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
     implementation 'org.postgresql:postgresql:42.6.0'
 	implementation 'edu.ksu.canvas:canvas-api:2.0.0'
-	implementation files('dependencies/lti-launch-1.5.0-SNAPSHOT.jar')
-	implementation files('dependencies/spring-security-oauth-2.5.3.RELEASE.jar')
-	implementation files('dependencies/spring-security-web-6.1.5.jar')
-	implementation files('dependencies/spring-security-config-6.1.5.jar')
-	implementation files('dependencies/spring-security-core-6.1.5.jar')
-	implementation files('dependencies/spring-security-crypto-6.1.5.jar')
-	// implementation files('dependencies/jakarta.activation-2.0.0.jar')
-	// implementation files('dependencies/jakarta.el-api-4.0.0.jar')
-	// implementation files('dependencies/jakarta.servlet.jsp.jstl-api-2.0.0.jar')
-	// implementation files('dependencies/jakarta.servlet-api-5.0.0.jar')
-	// implementation files('dependencies/jakarta.xml.bind-api-3.0.0.jar')
-	// implementation 'jstl:jstl:1.2'
-	implementation 'io.github.cdimascio:dotenv-java:3.0.0'
 	runtimeOnly 'com.h2database:h2'
-    // runtimeOnly 'org.apache.tomcat.embed:tomcat-embed-jasper'
-    // runtimeOnly 'javax.servlet:jstl:1.2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
 }
+
+task cleanStatic(type: Delete) {
+	delete 'src/main/resources/static'
+}
+
+task buildFrontend() {
+	doLast {
+		exec {
+			workingDir 'src/frontend'
+			print "Building frontend... "
+			if (System.properties['os.name'].toLowerCase().contains('windows')) {
+				println "(Windows)"
+				commandLine 'npm.cmd', 'run', 'build'
+			} else { // assume UNIX
+				println "(Unix)"
+				commandLine 'npm', 'run', 'build'
+			}
+		}
+		
+	}
+}
+
+task setupFrontend() {
+	doLast {
+		exec {
+			workingDir 'src/frontend'
+			print "Installing frontend dependencies... "
+			if (System.properties['os.name'].toLowerCase().contains('windows')) {
+				println "(Windows)"
+				commandLine 'npm.cmd', 'install'
+			} else { // assume UNIX
+				println "(Unix)"
+				commandLine 'npm', 'install'
+			}
+		}
+	}
+}
+
+task copyFrontendBuildToResources(type: Copy) {
+	dependsOn cleanStatic
+	from 'src/frontend/out'
+	into 'src/main/resources/static'
+}
+
+task exportFrontend {
+	dependsOn buildFrontend
+	dependsOn copyFrontendBuildToResources
+}
+
+processResources {
+	dependsOn copyFrontendBuildToResources
+}
+
+// Configure bootRun to depend on frontend tasks
+/*bootRun {
+	dependsOn buildFrontend
+	dependsOn copyFrontendBuildToResources
+}
+
+build.dependsOn buildFrontend, copyFrontendBuildToResources*/
 
 tasks.named('test') {
 	useJUnitPlatform()
