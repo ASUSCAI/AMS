@@ -18,7 +18,8 @@ public class SecurityConfigDev {
                 auth.anyRequest().permitAll();
             })
             .csrf().disable()
-            .cors().disable();
+            .cors().disable()
+            .headers().frameOptions().disable();
         return http.build();
     }
 }
