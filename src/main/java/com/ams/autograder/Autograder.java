@@ -1,10 +1,9 @@
 package com.ams.autograder;
 
-
-import java.io.IOException;
 import com.ams.restapi.attendance.AttendanceRecord;
 import com.ams.restapi.attendance.AttendanceRepository;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
