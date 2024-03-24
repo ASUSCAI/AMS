@@ -42,7 +42,7 @@ class LoadDatabase {
 
                 courseInfo.save(
                     new CourseInfo(
-                        1234L, "CSE205", "COOR170",
+                        1234L, 1234L, "CSE110", "COOR170",
                         List.of(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY),
                         LocalTime.of(12, 15), LocalTime.of(13,  5))
                 );
