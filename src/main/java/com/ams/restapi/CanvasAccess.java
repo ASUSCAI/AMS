@@ -8,7 +8,6 @@ import edu.ksu.canvas.CanvasApiFactory;
 import edu.ksu.canvas.interfaces.CanvasReader;
 import edu.ksu.canvas.oauth.NonRefreshableOauthToken;
 import edu.ksu.canvas.oauth.OauthToken;
-import io.github.cdimascio.dotenv.Dotenv;
 
 @Component
 public class CanvasAccess {
@@ -17,9 +16,8 @@ public class CanvasAccess {
     private final OauthToken oauthToken;
 
     public CanvasAccess() {
-        Dotenv env = Dotenv.load();
-        apiFactory = new CanvasApiFactory(env.get("CANVAS_URL"));
-        oauthToken = new NonRefreshableOauthToken(env.get("APIKEY"));
+        apiFactory = new CanvasApiFactory(System.getenv("AMS_CANVAS_URL"));
+        oauthToken = new NonRefreshableOauthToken(System.getenv("AMS_CANVAS_API_TOKEN"));
         System.out.println("USING TOKEN: " + oauthToken.getAccessToken());
     }
 
