@@ -14,8 +14,8 @@ import java.util.List;
 @Entity
 public class SectionInfo {
 
-    private static Long DEFAULT_TOLERANCE = 5L;
-    private static Long DEFAULT_LATE_TOLERANCE = 15L;
+    public static final Long DEFAULT_TOLERANCE = 5L;
+    public static final Long DEFAULT_LATE_TOLERANCE = 15L;
 
     private @Id Long id;
     private String name, room;
