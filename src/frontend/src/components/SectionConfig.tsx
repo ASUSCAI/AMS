@@ -15,7 +15,7 @@ export type CourseInfo = {
   defaultTimeConfig: TimeConfig | undefined;
 };
 
-const SectionConfig = () => {
+const AutograderTray = () => {
   const [currCourse, setCurrCourse] = useState<CourseInfo>();
   const [inputCourse, setInputCourse] = useState<CourseInfo>();
   const [error, setError] = useState<BoundError>();
@@ -282,4 +282,4 @@ const SectionConfig = () => {
   );
 };
 
-export default SectionConfig;
+export default AutograderTray;

@@ -2,7 +2,7 @@ import {Button, CloseButton, Flex, Heading, Tray, View} from "@instructure/ui";
 import ThresholdBox from "./ThresholdBox";
 import SpecConfigBox from "./SpecConfigBox";
 import SectionConfig from "./SectionConfig";
-import AutograderView from "./AutograderView";
+import AutograderTray from "./AutograderTray";
 import React from "react";
 
 
@@ -65,7 +65,7 @@ export class ConfigTray extends React.Component<ConfigTrayProps, ConfigTrayState
           <SpecConfigBox/>
           <ThresholdBox/>
           <SectionConfig/>
-          <AutograderView/>
+          <AutograderTray/>
         </View>
       </Tray>
     ));

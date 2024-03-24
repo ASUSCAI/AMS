@@ -5,7 +5,6 @@ import type { NextPage } from "next";
 import AttendanceView from "@/components/AttendanceView";
 import { ConfigTray } from "@/components/ConfigTray";
 import { PairTray } from "@/components/PairTray";
-import AutograderView from "@/components/AutograderView";
 
 type CourseInfo = {
   // add more attributes moving forward
@@ -20,7 +19,6 @@ const Home: NextPage = () => {
   return (
     <div className="mt-20">
       <AttendanceView/>
-      <AutograderView/>
       <ConfigTray/>
       <PairTray/>
     </div>
