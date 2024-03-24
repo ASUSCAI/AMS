@@ -108,9 +108,6 @@ const AttendanceView = () => {
             await axios
                 // @ts-ignore
                 .get(process.env.NEXT_PUBLIC_URL + "/attendance", {
-                    headers: {
-                        "Access-Control-Allow-Origin": process.env.NEXT_PUBLIC_URL,
-                    },
                     params: {
                         room: "COOR170",
                         date: dayjs(currentDate).format("YYYY-MM-DD"),
