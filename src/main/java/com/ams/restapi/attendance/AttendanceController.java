@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-
 import org.springframework.cache.CacheManager;
 
 import org.apache.logging.log4j.LogManager;
@@ -29,7 +28,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,7 +40,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ams.restapi.CanvasAccess;
 import com.ams.restapi.attendance.AttendanceRecord.AttendanceType;
 import com.ams.restapi.courseInfo.CourseInfoRepository;
-import com.ams.restapi.lti.LTILaunchController;
 import com.ams.restapi.timeConfig.DateSpecificTimeConfig;
 import com.ams.restapi.timeConfig.DateSpecificTimeRepository;
 import com.ams.restapi.timeConfig.TimeConfig;
@@ -66,11 +63,6 @@ import edu.ksu.canvas.enums.SectionIncludes;
 import edu.ksu.canvas.interfaces.SectionReader;
 import edu.ksu.canvas.model.Section;
 import edu.ksu.canvas.model.User;
-
-
-import edu.ksu.lti.launch.exception.NoLtiSessionException;
-import edu.ksu.lti.launch.model.LtiSession;
-import edu.ksu.lti.launch.service.LtiSessionService;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -126,9 +118,6 @@ public class AttendanceController {
 
     private static final Logger LOG = LogManager.getLogger(AttendanceController.class);
 
-    @Autowired
-    public LtiSessionService ltiSessionService;
-
     // Multi-item
 
     @GetMapping("/attendance")
@@ -142,23 +131,8 @@ public class AttendanceController {
         @RequestParam("page") int page,
         @RequestParam("size") int size,
         @RequestParam("sortBy") Optional<String> sortBy,
-        @RequestParam("sortType") Optional<String> sortType) throws NoLtiSessionException {
-
-            boolean anonymous = true;
-            try {
-                LtiSession ltiSession = ltiSessionService.getLtiSession();
-            // if (ltiSession.getEid() == null || ltiSession.getEid().isEmpty()) {
-            //     throw new AccessDeniedException("You cannot access this content without a valid session");
-            // }
-
-                LOG.info("Attendance Records Accessed By: " + ltiSession.getEid());
-            } catch(Exception e) {
-                anonymous = false;
-            }
+        @RequestParam("sortType") Optional<String> sortType) {
             
-            if (anonymous)
-                LOG.info("Anonymous Attendance Records Access");
-
             if (room == null || room.isEmpty() || date == null || date.isEmpty())
                 throw new AttendanceRecordPostInvalidException("Missing some/all required fields");
             Pageable pageable = PageRequest.of(page, size);

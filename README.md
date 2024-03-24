@@ -1,14 +1,16 @@
-# AMS: Spring Boot Backend
+# Attendance Management System (AMS) Software
 
 ## Requirements
-JDK 17
+- JDK 17
+- Node.js (Latest LTS version)
 
 ## How to build
 
 Build with Gradle wrapper:
 
 ```sh
-$ ./gradlew clean build
+$ ./gradlew setupFrontend
+$ ./gradlew exportFrontend
 ```
 
 ## How to run
@@ -19,9 +21,4 @@ Run with Gradle wrapper:
 $ ./gradlew bootRun
 ```
 
-## Testing with Curl
-
-```sh
-$ curl http://localhost:8080/hi?name=Gabe
-"Hi Gabe"
-```
+Upon reaching 85% the frontend should become accessible at http://localhost:8080/
