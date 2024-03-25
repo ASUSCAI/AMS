@@ -47,14 +47,17 @@ public class AttendanceControllerTests {
     }
     @Test
     @WithMockUser(roles="INSTRUCTOR")
-    void deleteRcord() throws Exception {
+    void deleteRecord() throws Exception {
         mockMvc.perform(get("/attendance/25"))
             .andExpect(status().isOk())
             .andDo(print());
-        mockMvc.perform(delete("/attendance/25").with(csrf()))
+        mockMvc.perform(delete("/attendance/25")
+            .with(csrf()))
             .andDo(print());
         mockMvc.perform(get("/attendance/25"))
             .andExpect(status().isNotFound())
             .andDo(print());
     }
+
+    
 }
