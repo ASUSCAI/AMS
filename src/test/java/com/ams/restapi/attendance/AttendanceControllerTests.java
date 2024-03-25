@@ -8,7 +8,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.security.test.context.support.WithMockUser;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -42,4 +45,19 @@ public class AttendanceControllerTests {
                 .andExpect(jsonPath("$[*].type").value(everyItem(equalTo("LEFT"))))
                 .andDo(print());
     }
+    @Test
+    @WithMockUser(roles="INSTRUCTOR")
+    void deleteRecord() throws Exception {
+        mockMvc.perform(get("/attendance/25"))
+            .andExpect(status().isOk())
+            .andDo(print());
+        mockMvc.perform(delete("/attendance/25")
+            .with(csrf()))
+            .andDo(print());
+        mockMvc.perform(get("/attendance/25"))
+            .andExpect(status().isNotFound())
+            .andDo(print());
+    }
+
+    
 }
