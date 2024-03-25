@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 import static org.hamcrest.Matchers.*;
 
@@ -48,6 +49,7 @@ public class AttendanceControllerTests {
     @WithMockUser(roles="INSTRUCTOR")
      void shouldUpdateAttendenceRecord() throws Exception {
         mockMvc.perform(put("/attendance/33")
+                .with(csrf())
                 .content("{\n" + //
                             "\t\"room\": \"COOR170\",\n" + //
                             "\t\"date\": \"2024-01-11\",\n" + //
