@@ -613,3 +613,16 @@ a {
         opacity: 1;
     }
 }
+
+.input-box-container {
+    display: flex;
+  }
+  
+  .input-box-container input {
+    margin-right: 10px; /* Add spacing between inputs */
+  }
+
+  .right-aligned {
+    text-align: right;
+    margin-right: 5%;
+  }

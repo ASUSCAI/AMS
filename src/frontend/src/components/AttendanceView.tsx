@@ -11,13 +11,17 @@ import {
     TextInput,
     TimeSelect,
     Button,
-} from "@instructure/ui";
+} from "@instructure/ui"; 
 import axios from "axios";
 
 import type {DateContextType} from "@/contexts/DateContext";
 import {DateContext} from "@/contexts/DateContext";
 import {SortableTable} from "@/components/SortableTable";
 import {CourseInfo} from "./SectionConfig";
+
+import {RiArrowDownSLine, RiArrowUpSLine} from "react-icons/ri";
+
+import {TimeConfig, BoundError, areTimeConfigsEqual} from "./ThresholdBox";
 
 // helper functions
 import {DateSelect} from "./DateSelect";
@@ -26,7 +30,7 @@ import dayjs from "dayjs";
 import SectionSelect from "./SectionSelect";
 
 // types
-export type User = {
+export type User = { //ggg
     id: number,
     name: {
         first: string;
@@ -40,8 +44,7 @@ export type User = {
 type FilterOpts = {
     beginTime: string | undefined;
     endTime: string | undefined;
-    firstName: string | undefined;
-    lastName: string | undefined;
+    person: string | undefined;
     sid: number | undefined;
     typesOfScan: string[] | undefined;
 };
@@ -63,8 +66,7 @@ const AttendanceView = () => {
     const [selectedFilters, setSelectedFilters] = useState<FilterOpts>({
         beginTime: undefined,
         endTime: undefined,
-        firstName: undefined,
-        lastName: undefined,
+        person: undefined,
         sid: undefined,
         typesOfScan: ['ARRIVED', 'LEFT', 'ARRIVED_LATE', 'ARRIVED_INVALID', 'LEFT_INVALID', 'INVALID'],
     });
@@ -110,6 +112,9 @@ const AttendanceView = () => {
             await axios
                 // @ts-ignore
                 .get(process.env.NEXT_PUBLIC_URL + "/attendance", {
+                    headers: {
+                        "Access-Control-Allow-Origin": process.env.NEXT_PUBLIC_URL,
+                    },
                     params: {
                         room: "COOR170",
                         date: dayjs(currentDate).format("YYYY-MM-DD"),
@@ -187,9 +192,8 @@ const AttendanceView = () => {
             const filterVals = {
                 beginTime: retrieveTimeFromISODate(inputFilters.beginTime),
                 endTime: retrieveTimeFromISODate(inputFilters.endTime),
-                firstName: inputFilters.firstName,
-                lastName: inputFilters.lastName,
-                sid: inputFilters.sid,
+                name: inputFilters.name,
+                sid: undefined,
                 typesOfScan: inputFilters.typesOfScan,
             }
             setSelectedFilters(filterVals);
@@ -203,8 +207,7 @@ const AttendanceView = () => {
         const filterVals = {
             beginTime: undefined, 
             endTime: undefined,
-            firstName: undefined,
-            lastName: undefined,
+            name: undefined,
             sid: undefined,
             typesOfScan: ['ARRIVED', 'LEFT', 'ARRIVED_LATE', 'ARRIVED_INVALID', 'LEFT_INVALID', 'INVALID'],
         }
@@ -249,7 +252,8 @@ const AttendanceView = () => {
                     toggleLabel="Column-specific filtering options"
                     summary="Filtering"
                 >
-                    <View display="inline-block" padding="small" maxWidth="15rem">
+                <div className="input-container">
+                    <View display="inline-block" padding="small" maxWidth="18rem">
                         <TimeSelect
                             renderLabel="Begin Time"
                             id="beginTime"
@@ -276,7 +280,7 @@ const AttendanceView = () => {
                         />
                     </View>
 
-                    <View display="inline-block" padding="small" maxWidth="15rem">
+                    <View display="inline-block" padding="small" maxWidth="18rem">
                         <TimeSelect
                             renderLabel="End Time"
                             id="endTime"
@@ -303,53 +307,24 @@ const AttendanceView = () => {
                         />
                     </View>
 
-                    <View display="inline-block" padding="small" width="25rem">
+                    <View display="inline-block" padding="small" width="18rem">
                         <TextInput
-                            renderLabel="Last Name"
-                            placeholder="Enter exact last name to search"
+                            renderLabel="Search Person"
+                            placeholder="Enter Person Details to search"
                             onChange={(event, value) =>
                                 setInputFilters((prevData: FilterOpts) => {
                                     if (prevData) {
-                                        return {...prevData, lastName: value};
+                                        return {...prevData, person: value};
                                     }
                                     return prevData;
                                 })
                             }
-                            value={inputFilters?.lastName ? inputFilters?.lastName : ""}
+                            value={inputFilters?.person ? inputFilters?.person : ""}
                         />
                     </View>
 
-                    <View display="inline-block" padding="small" width="25rem">
-                        <TextInput
-                            renderLabel="First Name"
-                            placeholder="Enter exact first name to search"
-                            onChange={(event, value) =>
-                                setInputFilters((prevData: FilterOpts) => {
-                                    if (prevData) {
-                                        return {...prevData, firstName: value};
-                                    }
-                                    return prevData;
-                                })
-                            }
-                            value={inputFilters?.firstName ? inputFilters?.firstName : ""}
-                        />
-                    </View>
 
-                    <View display="inline-block" padding="small" maxWidth="15rem">
-                        <TextInput
-                            renderLabel="ID #"
-                            placeholder="Enter ASU ID"
-                            onChange={(event, value) =>
-                                setInputFilters((prevData: FilterOpts) => {
-                                    if (prevData) {
-                                        return {...prevData, sid: parseInt(value)};
-                                    }
-                                    return prevData;
-                                })
-                            }
-                            value={inputFilters?.sid ? (inputFilters?.sid).toString() : ""}
-                        />
-                    </View>
+                    </div>
 
                     <br></br>
                     <View display="inline-block" padding="small" width="54rem">
@@ -370,6 +345,7 @@ const AttendanceView = () => {
                             selectedTypeIDs={inputFilters?.typesOfScan || []}
                         />
                     </View>
+                    <div className="right-aligned">
                     <button
                         className="filter-btn"
                         onClick={handleSearchButtonClick}
@@ -378,12 +354,16 @@ const AttendanceView = () => {
                     </button>
 
                     <button
-                        className="filter-btn filter-clr"
+                        className="sub-btn cancel-btn"
+                        themeOverride={{
+                          mediumPaddingTop: '5px',
+                          mediumPaddingBottom: '5px',
+                        }}
                         onClick={handleClearButtonClick}
                     >
                         Clear
                     </button>
-
+                    </div>
                 </ToggleGroup>
                 <br/>
                 {attendanceData.length > 0 ? (
