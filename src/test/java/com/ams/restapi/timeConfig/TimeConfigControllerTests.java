@@ -22,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.security.test.context.support.WithMockUser;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -33,7 +34,9 @@ public class TimeConfigControllerTests {
         assertNotNull(controller);
     }
 
-    @Test void courseInfoShouldGenerateDefaultTimeConfig() throws Exception {
+    @Test
+    @WithMockUser(roles="INSTRUCTOR") 
+    void courseInfoShouldGenerateDefaultTimeConfig() throws Exception {
         LocalTime startIn = LocalTime.of(10, 10);
         LocalTime endIn = LocalTime.of(11, 50);
         CourseInfo testCourseInfo = new CourseInfo(1234L, 1234L, "CSE 110", "COOR170", List.of(DayOfWeek.MONDAY), startIn, endIn);
