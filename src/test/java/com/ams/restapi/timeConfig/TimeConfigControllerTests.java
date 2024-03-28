@@ -1,31 +1,30 @@
 package com.ams.restapi.timeConfig;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.time.LocalTime;
-import java.util.List;
-import java.time.DayOfWeek;
 import com.ams.restapi.courseInfo.CourseInfo;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.security.test.context.support.WithMockUser;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@AutoConfigureMockMvc
 @SpringBootTest
+@AutoConfigureMockMvc
 public class TimeConfigControllerTests {
     @Autowired private TimeConfigController controller;
     @Autowired private MockMvc mockMvc;
@@ -46,7 +45,7 @@ public class TimeConfigControllerTests {
 
         MockHttpServletRequestBuilder request = put("/courseInfo/1234").content(mapper.writeValueAsString(testCourseInfo)).contentType("application/json");
 
-        ResultActions response = mockMvc.perform(request);
+        ResultActions response = mockMvc.perform(request.with(csrf()));
         response.andExpect(status().isOk()).andDo(print());
 
         mockMvc.perform(get("/timeConfig/1234"))
