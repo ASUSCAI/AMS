@@ -12,11 +12,8 @@ import org.springframework.context.annotation.Configuration;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
-import java.io.BufferedReader;
 
 @Configuration
 class LoadDatabase {
@@ -25,7 +22,7 @@ class LoadDatabase {
     private static final boolean BEAN = true;
 
     @Bean
-    CommandLineRunner initDatabase(AttendanceRepository attendance, CourseInfoRepository courseInfo) {
+    CommandLineRunner initDatabase(AttendanceRepository attendance, SectionInfoRepository courseInfo) {
         if (BEAN) {
             return args -> {
                 log.info("BEAN MODE ACTIVATED");
@@ -39,14 +36,14 @@ class LoadDatabase {
                 }
                 reader.close();
 
-                courseInfo.save(
+                /*courseInfo.save(
                     new CourseInfo(
                         1234L, 1234L, "CSE110", "COOR170",
                         List.of(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY),
                         LocalTime.of(12, 15), LocalTime.of(13,  5))
                 );
 
-                System.out.println(courseInfo.findById(1234L).get().getDefaultTimeConfig());
+                System.out.println(courseInfo.findById(85L).get().getDefaultTimeConfig());*/
 
                 // times.save(new TimeConfig(
                 //     1234L,
