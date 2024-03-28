@@ -7,7 +7,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 public class SectionInfoDTO {
-    private String name, room;
+    private String name, readerId;
     private List<DayOfWeek> daysOfWeek;
     private LocalTime startTime, endTime;
     private TimeConfigDTO defaultTimeConfig;
@@ -25,7 +25,7 @@ public class SectionInfoDTO {
 
     public SectionInfoDTO(SectionInfo sectionInfo) {
         name = sectionInfo.getName();
-        room = sectionInfo.getRoom();
+        readerId = sectionInfo.getReaderId();
         startTime = sectionInfo.getStartTime();
         endTime = sectionInfo.getEndTime();
         daysOfWeek = sectionInfo.getDaysOfWeek();
@@ -40,12 +40,12 @@ public class SectionInfoDTO {
         this.name = name;
     }
 
-    public String getRoom() {
-        return room;
+    public String getReaderId() {
+        return readerId;
     }
 
-    public void setRoom(String room) {
-        this.room = room;
+    public void setReaderId(String readerId) {
+        this.readerId = readerId;
     }
 
     public List<DayOfWeek> getDaysOfWeek() {
@@ -73,7 +73,7 @@ public class SectionInfoDTO {
     }
 
     public SectionInfo toEntity(Long courseID) {
-        SectionInfo course = new SectionInfo(courseID, name, room,
+        SectionInfo course = new SectionInfo(courseID, name, readerId,
                 daysOfWeek, startTime, endTime, null);
         if (defaultTimeConfig == null)
             course.setDefaultTimeConfig(
