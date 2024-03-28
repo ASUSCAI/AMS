@@ -37,12 +37,14 @@ a {
 }
 
 .filter-btn {
-    background: rgb(0, 143, 5);
+    background-color: #f2f2f2; /* light grey whitish color */
+    border: 1px solid #ccc; /* border around the button */
+    color: #333; /* text color */ /* smaller padding */
+    border-radius: 4px; /* rounded corners */
     margin: 1rem;
     padding: 0.5rem;
-    border: 1px solid black;
-    border-radius: 0.25rem;
-    color: rgb(252, 248, 248);
+   
+   /* border-radius: 0.25rem;*/
 }
 
 .filter-clr {
@@ -626,3 +628,21 @@ a {
     text-align: right;
     margin-right: 5%;
   }
+
+ 
+
+.clear-btn {
+  background-color: #f2f2f2; /* light grey whitish color */
+  border: 1px solid #ccc; /* border around the button */
+  color: #333; /* text color */ /* smaller padding */
+  border-radius: 4px; /* rounded corners */
+  cursor: pointer; /* cursor style */
+  outline: none; /* remove outline */
+  display: flex; /* use flexbox layout */
+  justify-content: center; /* center content horizontally */
+  align-items: center; 
+}
+
+.clear-btn:hover {
+  background-color: #e0e0e0; /* darker background on hover */
+}
