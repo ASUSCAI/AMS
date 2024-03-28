@@ -18,7 +18,7 @@ public class SectionInfo {
     public static final Long DEFAULT_LATE_TOLERANCE = 15L;
 
     private @Id Long id;
-    private String name, room;
+    private String name, readerId;
     // @CollectionTable(joinColumns = @JoinColumn(name = "courseinfo_id"))
     @ElementCollection(fetch = FetchType.EAGER)
     private List<DayOfWeek> daysOfWeek;
@@ -51,11 +51,11 @@ public class SectionInfo {
     public SectionInfo() {
     }
 
-    public SectionInfo(Long id, String name, String room,
+    public SectionInfo(Long id, String name, String readerId,
                        List<DayOfWeek> daysOfWeek, LocalTime startTime, LocalTime endTime) {
         this.id = id;
         this.name = name;
-        this.room = room;
+        this.readerId = readerId;
         this.startTime = startTime;
         this.endTime = endTime;
         this.daysOfWeek = daysOfWeek;
@@ -63,12 +63,12 @@ public class SectionInfo {
         dateSpecificTimeConfigs = new ArrayList<>();
     }
 
-    public SectionInfo(Long id, String name, String room,
+    public SectionInfo(Long id, String name, String readerId,
                        List<DayOfWeek> daysOfWeek, LocalTime startTime, LocalTime endTime,
                        TimeConfig defaultTimeConfig) {
         this.id = id;
         this.name = name;
-        this.room = room;
+        this.readerId = readerId;
         this.startTime = startTime;
         this.endTime = endTime;
         this.daysOfWeek = daysOfWeek;
@@ -97,12 +97,12 @@ public class SectionInfo {
         this.id = id;
     }
 
-    public String getRoom() {
-        return room;
+    public String getReaderId() {
+        return readerId;
     }
 
-    public void setRoom(String room) {
-        this.room = room;
+    public void setReaderId(String readerId) {
+        this.readerId = readerId;
     }
 
     public LocalTime getStartTime() {
@@ -139,7 +139,7 @@ public class SectionInfo {
 
     @Override
     public String toString() {
-        return "CourseInfo [id=" + id + ", room=" + room + ", courseName=" + name + ", daysOfWeek="
+        return "CourseInfo [id=" + id + ", room=" + readerId + ", courseName=" + name + ", daysOfWeek="
                 + daysOfWeek + ", startTime=" + startTime + ", endTime=" + endTime + "]";
     }
 
