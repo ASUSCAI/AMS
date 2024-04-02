@@ -1,5 +1,6 @@
 import React from "react";
 import Select, { components, GroupHeadingProps } from "react-select";
+import styles from '../../styles/SectionSelectStyle.module.scss'; 
 
 // Define the SectionOption type
 type SectionOption = { label: string; value: string };

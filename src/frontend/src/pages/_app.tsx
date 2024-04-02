@@ -4,8 +4,7 @@ import Layout from "@/components/pages/Layout";
 // contexts
 import DateProvider from "@/contexts/DateContext";
 
-// styles
-import "@/styles/globals.css";
+import '../styles/SectionConfigStyle.scss';
 
 // types
 import type { AppProps } from "next/app";

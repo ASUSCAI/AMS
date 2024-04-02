@@ -5,6 +5,7 @@ import React, {
 
 import {TimeConfig, areTimeConfigsEqual, BoundError} from "./ThresholdBox";
 import DateSlider from "./DateSlider";
+import styles from '../../styles/SpecThresholdBoxStyle.module.scss';
 
 // styles
 import axios from "axios";

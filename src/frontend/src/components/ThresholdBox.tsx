@@ -8,9 +8,10 @@ import axios from "axios";
 import {RiArrowDownSLine, RiArrowUpSLine} from "react-icons/ri";
 import DateSlider from "@/components/DateSlider";
 import {Button} from "@instructure/ui";
-import styles from "@/styles/TimeView.module.scss";
+import timeViewStyles from "@/styles/TimeView.module.scss";
 import {TimeSelect} from "@instructure/ui-time-select";
 import {Alert, CloseButton} from "@instructure/ui";
+import thresholdBoxStyles from '../../styles/ThresholdBoxStyle.module.scss';
 
 export type TimeConfig = {
   // add more attributes moving forward

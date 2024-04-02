@@ -1,0 +1,45 @@
+.expand-label {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 5px;
+    margin-top: 10px;
+    color: #2D3B45;
+
+    > span {
+      font-size: 2rem;
+      margin: auto;
+  }
+  }
+
+  .specific-config-box {
+    border: solid 1px #C7CDD1;
+    border-radius: 5px;
+  }
+  
+
+  .btn-box {
+    display: flex;
+    padding: 10px;
+    justify-content: space-between;
+    width: 165px;
+    margin-left: auto;
+    //background-color: red;
+  
+    button {
+        span {
+            transition: all 0.1s ease 0s;
+            opacity: 1 !important;
+        }
+  
+        &:disabled {
+            span {
+                opacity: .75 !important;
+            }
+        }
+    }
+  }

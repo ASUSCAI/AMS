@@ -4,6 +4,7 @@ import React, {useEffect, useState} from "react";
 import {RiArrowDownSLine, RiArrowUpSLine} from "react-icons/ri";
 
 import {TimeConfig, BoundError, areTimeConfigsEqual} from "./ThresholdBox";
+import styles from '../../styles/SectionConfigStyle.module.scss';
 
 export type CourseInfo = {
   // add more attributes moving forward

@@ -1,0 +1,73 @@
+.spec-btn-sect {
+    /* background-color: red; */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    position: relative;
+}
+
+.use-default-checkbox {
+    display: flex;
+    align-items: center;
+    margin-left: 13px;
+  
+    input {
+      width: 15px;
+      height: 15px;
+      margin-right: 8px;
+  
+      &:checked + label {
+        color: #007bff;
+      }
+    }
+  
+    label {
+      font-size: 16px;
+      color: #333;
+      cursor: pointer;
+      user-select: none;
+    }
+  }
+
+  
+  .date-input-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    color: black;
+    margin: 5px 10px 0;
+
+    .triangle-button {
+        margin-top: auto;
+        margin-bottom: auto;
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+        font-size: 1.8rem;
+    }
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.btn-box {
+  display: flex;
+  padding: 10px;
+  justify-content: space-between;
+  width: 165px;
+  margin-left: auto;
+  //background-color: red;
+
+  button {
+      span {
+          transition: all 0.1s ease 0s;
+          opacity: 1 !important;
+      }
+
+      &:disabled {
+          span {
+              opacity: .75 !important;
+          }
+      }
+  }
+}

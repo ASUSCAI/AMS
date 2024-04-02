@@ -6,6 +6,7 @@ import type {DateContextType} from "@/contexts/DateContext";
 import {DateContext} from "@/contexts/DateContext";
 import SpecThresholdBox from "./SpecThresholdBox";
 import {DateSelect} from "./DateSelect";
+import styles from '../../styles/SpecConfigBoxStyle.module.scss';
 
 const SpecConfigBox = () => {
   const {currentDate} = useContext<DateContextType>(DateContext);

@@ -1,0 +1,84 @@
+.expand-label {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 5px;
+  margin-top: 10px;
+  color: #2D3B45;
+}
+.expand-label > span {
+  font-size: 2rem;
+  margin: auto;
+}
+
+.specific-config-box {
+  border: solid 1px #C7CDD1;
+  border-radius: 5px;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+}
+.wrapper > select {
+  width: 25rem;
+  height: 2.5rem;
+  margin: auto;
+  border-radius: 4px;
+  padding: 0.25rem 0.25rem 0.25rem 0.5rem;
+  font-size: 1rem;
+  border: solid 1px lightgray;
+}
+.wrapper > label {
+  font-size: 1rem;
+  font-weight: bold;
+  margin: auto;
+}
+
+.wrapper-text {
+  width: 1rem;
+}
+
+.week-days-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  /* height: 100px; */
+  /* background-color: red; */
+  width: 19rem;
+}
+
+.day-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: lightgray;
+}
+.day-circle:hover {
+  background-color: rgb(94, 163, 210);
+  border: solid 1px black;
+}
+
+.btn-box {
+  display: flex;
+  padding: 10px;
+  justify-content: space-between;
+  width: 165px;
+  margin-left: auto;
+}
+.btn-box button span {
+  transition: all 0.1s ease 0s;
+  opacity: 1 !important;
+}
+.btn-box button:disabled span {
+  opacity: 0.75 !important;
+}/*# sourceMappingURL=SectionConfigStyle.css.map */
