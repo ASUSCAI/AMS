@@ -1,0 +1,42 @@
+.filter-btn {
+    background: rgb(0, 143, 5);
+    margin: 1rem;
+    padding: 0.5rem;
+    border: 1px solid black;
+    border-radius: 0.25rem;
+    color: rgb(252, 248, 248);
+}
+
+.filter-clr {
+    margin-left: 0.2rem;
+    background: rgb(42, 111, 249);
+}
+
+.page-size-box {
+    margin-top: 15px;
+    margin-left: 15px;
+    border: solid 1px rgb(0, 0, 0);
+    border-radius: 4px;
+    width: 9rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between; 
+
+    label {
+        margin: 3px;
+        font-size: 1rem;
+        color: black;
+    }
+
+    select {
+        width: 3.5rem;
+        font-size: 1rem;
+        border: solid 1px lightgray;
+        border-radius: 4px;
+        text-align: center;
+        margin: 2px;
+        padding: 1px;
+        color: black;
+    }
+}
+

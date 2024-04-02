@@ -1,0 +1,21 @@
+.date-input-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    color: black;
+    margin: 5px 10px 0;
+  
+    > .triangle-button {
+      margin-top: auto;
+      margin-bottom: auto;
+      padding-left: 0.25rem;
+      padding-right: 0.25rem;
+      font-size: 1.8rem;
+  
+      > :hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  

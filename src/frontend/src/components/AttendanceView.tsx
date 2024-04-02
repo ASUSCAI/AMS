@@ -18,6 +18,7 @@ import type {DateContextType} from "@/contexts/DateContext";
 import {DateContext} from "@/contexts/DateContext";
 import {SortableTable} from "@/components/SortableTable";
 import {CourseInfo} from "./SectionConfig";
+import styles from '../../styles/AttendanceViewStyle.module.scss';
 
 // helper functions
 import {DateSelect} from "./DateSelect";

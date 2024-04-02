@@ -1,0 +1,38 @@
+.pair-config-btn {
+    position: absolute;
+    top: 1.5rem;
+    right: 13rem;
+    border-radius: 0.25rem;
+    padding: 0.4rem 0.75rem;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    .p-splitbutton {
+        &.paired {
+            background-color: green;
+            border-color: green;
+            color: white;
+        }
+
+        &:not(.paired) {
+            background-color: #fff; // This overrides the previous #f8f9fa background-color for :not(.paired)
+            border-radius: 0.25rem;
+            font-weight: 600;
+            color: #495057;
+            border-color: #ddd;
+
+            .p-button-label {
+                color: black;
+            }
+
+            &:hover {
+                background-color: #f0f0f0;
+                border-color: #ccc;
+            }
+        }
+    }
+}

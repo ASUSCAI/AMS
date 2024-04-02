@@ -1,0 +1,31 @@
+.expand-label {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 5px;
+    margin-top: 10px;
+    color: #2D3B45;
+
+    > span {
+        font-size: 2rem;
+        margin: auto;
+    }
+}
+
+.time-config-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    /* background-color: rgb(205, 31, 31); */
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+

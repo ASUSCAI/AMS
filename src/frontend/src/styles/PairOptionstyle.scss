@@ -1,0 +1,51 @@
+.pair-list-items {
+    color: rgb(54, 60, 129);
+    background-color: rgb(230, 243, 255);
+    border: 1px solid rgb(230, 243, 255);
+    border-radius: 5px;
+    padding: 0.5rem 1.5rem;
+    margin: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; // Optional: align items vertically
+  
+    button {
+      background-color: transparent;
+      border: 1px solid rgb(148, 148, 150);
+      border-radius: 5px;
+      padding: 0.5rem;
+      color: rgb(148, 148, 150);
+      font-size: 12px;
+      width: 5rem;
+  
+      &:not([disabled]) {
+        border-color: cornflowerblue;
+        color: cornflowerblue;
+  
+        &:hover {
+          background-color: cornflowerblue;
+          color: whitesmoke;
+        }
+      }
+    }
+  }
+
+  %status-shared-style {
+    font-size: 11px;
+  }
+  
+  .status-paired {
+    @extend %status-shared-style;
+    color: rgb(13, 176, 13);
+  }
+  
+  .status-unpaired {
+    @extend %status-shared-style;
+    color: red;
+  }
+  
+  .status-maintenance {
+    @extend %status-shared-style;
+    color: rgb(246, 208, 58);
+  }
+  
