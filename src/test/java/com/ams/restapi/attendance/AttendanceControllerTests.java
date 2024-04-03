@@ -14,7 +14,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import static org.hamcrest.Matchers.*;
 
 @SpringBootTest
@@ -28,6 +27,7 @@ public class AttendanceControllerTests {
     }
 
     @Test
+
     @WithMockUser(roles="INSTRUCTOR")
     void shouldReturnCorrectPageSize() throws Exception {
         mockMvc.perform(get("/attendance")
