@@ -8,11 +8,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.security.test.context.support.WithMockUser;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+
 import static org.hamcrest.Matchers.*;
 
 @SpringBootTest
@@ -40,6 +42,45 @@ public class AttendanceControllerTests {
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.length()").value(10))
                 .andExpect(jsonPath("$[*].type").value(everyItem(equalTo("LEFT"))))
+                .andDo(print());
+    }
+
+    @Test
+    @WithMockUser(roles="INSTRUCTOR")
+     void shouldUpdateAttendenceRecord() throws Exception {
+        mockMvc.perform(put("/attendance/33")
+                .with(csrf())
+                .content("{\n" + //
+                            "\t\"room\": \"COOR170\",\n" + //
+                            "\t\"date\": \"2024-01-11\",\n" + //
+                            "\t\"time\": \"13:00\",\n" + //
+                            "\t\"sid\": \"1221000004\",\n" + //
+                            "\t\"type\": \"LEFT\"\n" + //
+                            "}").contentType("application/json"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.length()").value(6))
+                .andExpect(jsonPath("$.id").value("33"))
+                .andExpect(jsonPath("$.room").value("COOR170"))
+                .andExpect(jsonPath("$.date").value("2024-01-11"))
+                .andExpect(jsonPath("$.time").value("13:00"))
+                .andExpect(jsonPath("$.sid").value("1221000004"))
+                .andExpect(jsonPath("$.type").value("LEFT"))
+                .andDo(print());
+    }
+
+    @Test
+    @WithMockUser(roles="INSTRUCTOR")
+    void shouldGetAttendanceRecordbyID() throws Exception {
+        mockMvc.perform(get("/attendance/33"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.id").value("33"))
+                .andExpect(jsonPath("$.room").value("COOR170"))
+                .andExpect(jsonPath("$.date").value("2024-01-11"))
+                .andExpect(jsonPath("$.time").value("13:00"))
+                .andExpect(jsonPath("$.sid").value("1221000004"))
+                .andExpect(jsonPath("$.type").value("LEFT"))
                 .andDo(print());
     }
 }
