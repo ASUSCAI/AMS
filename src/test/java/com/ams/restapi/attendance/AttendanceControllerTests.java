@@ -24,8 +24,7 @@ public class AttendanceControllerTests {
         assertNotNull(controller);
     }
 
-    @Test 
-    
+    @Test
     void shouldReturnCorrectPageSize() throws Exception {
         mockMvc.perform(get("/attendance")
                 .param("room", "COOR170")
