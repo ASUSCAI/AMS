@@ -50,19 +50,21 @@ import jakarta.persistence.criteria.Root;
  */
 @RestController
 class AttendanceController {
-    
+
     private final AttendanceRepository repository;
     private final CourseInfoRepository courseInfo;
     private final DateSpecificTimeRepository dateConfigs;
+    private final DismissedStudentRepository dismissedStudentRepository; 
 
     @PersistenceContext
     private EntityManager eManager;
-    
+
     AttendanceController(AttendanceRepository repository,
-        CourseInfoRepository courseInfo, DateSpecificTimeRepository dateConfigs) {
+            CourseInfoRepository courseInfo, DateSpecificTimeRepository dateConfigs, DismissedStudentRepository dismissedStudentRepository) {
         this.repository = repository;
         this.courseInfo = courseInfo;
         this.dateConfigs = dateConfigs;
+        this.dismissedStudentRepository = dismissedStudentRepository; 
     }
 
     // Multi-item
