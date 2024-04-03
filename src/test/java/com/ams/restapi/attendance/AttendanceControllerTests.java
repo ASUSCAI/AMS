@@ -2,6 +2,7 @@ package com.ams.restapi.attendance;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import static org.hamcrest.Matchers.*;
 public class AttendanceControllerTests {
     @Autowired private AttendanceController controller;
     @Autowired private MockMvc mockMvc; 
+    @MockBean private AttendanceRepository attendanceRecordRepository;
     @MockBean private DismissedStudentRepository dismissedStudentRepository;
 
     @Test void contextLoads() throws Exception {
@@ -103,45 +105,38 @@ public class AttendanceControllerTests {
 
     @Test
     @WithMockUser(roles="INSTRUCTOR")
-    void dismissStudent() throws Exception {
-        String studentId = "123456789";
-        Long attendanceRecordId = 1L;
+    void testDismissStudent() throws Exception {
+       
+        when(attendanceRecordRepository.findById(1L)).thenReturn(java.util.Optional.of(new AttendanceRecord()));
+        when(dismissedStudentRepository.save(any())).thenReturn(new DismissedStudent());
 
-        mockMvc.perform(post("/attendance/{id}/dismiss", attendanceRecordId)
-                .param("studentId", studentId)
-                .contentType("application/json"))
+        mockMvc.perform(post("/attendance/1/dismiss").param("studentId", "123").with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.studentId").value(studentId))
+                .andExpect(jsonPath("$.studentId").value("123"))
                 .andDo(print());
     }
 
     @Test
     @WithMockUser(roles="INSTRUCTOR")
-    void isStudentDismissed() throws Exception {
-        String studentId = "123456789";
-
-        when(dismissedStudentRepository.existsByStudentId(studentId)).thenReturn(true);
-
-        mockMvc.perform(get("/attendance/{id}/dismiss", 1L)
-                .param("studentId", studentId)
-                .contentType("application/json"))
+    void testIsStudentDismissed() throws Exception {
+       
+        when(dismissedStudentRepository.existsByStudentId("123")).thenReturn(true);
+       
+        mockMvc.perform(get("/attendance/1/dismiss").param("studentId", "123"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$").value(true))
+                .andExpect(content().string("true"))
                 .andDo(print());
     }
 
     @Test
     @WithMockUser(roles="INSTRUCTOR")
-    void cancelDismissal() throws Exception {
-        String studentId = "123456789";
-
-        mockMvc.perform(delete("/attendance/{id}/dismiss", 1L)
-                .param("studentId", studentId)
-                .contentType("application/json"))
+    void testCancelDismissal() throws Exception {
+       
+        mockMvc.perform(delete("/attendance/1/dismiss").param("studentId", "123").with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Dismissal cancelled for student ID: " + studentId))
+                .andExpect(content().string("Dismissal cancelled for student ID: 123"))
                 .andDo(print());
     }
 }
