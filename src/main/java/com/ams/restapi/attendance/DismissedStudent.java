@@ -11,7 +11,6 @@ public class DismissedStudent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String studentId;
 
     public Long getId() {

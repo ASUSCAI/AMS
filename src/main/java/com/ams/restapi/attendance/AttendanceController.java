@@ -258,7 +258,7 @@ class AttendanceController {
         return ResponseEntity.ok("Deleted attendance log " + id);
     }
 
-    @PostMapping("/attendance/{id}/dismiss")
+    @PostMapping("/attendance/excusal/{course_id}/{section_id}/{date}/{student_id}/dismiss")
     ResponseEntity<DismissedStudent> dismissStudent(@PathVariable Long id, @RequestParam String studentId) {
         AttendanceRecord record = repository.findById(id)
                 .orElseThrow(() -> new AttendanceLogNotFoundException(id));
@@ -270,18 +270,17 @@ class AttendanceController {
         return ResponseEntity.ok(savedDismissedStudent);
     }
 
-    @GetMapping("/attendance/{id}/dismiss")
+    @GetMapping("/attendance/excusal/{course_id}/{section_id}/{date}/{student_id}/dismiss")
     ResponseEntity<Boolean> isStudentDismissed(@PathVariable Long id, @RequestParam String studentId) {
         
         boolean dismissed = dismissedStudentRepository.existsByStudentId(studentId);
         return ResponseEntity.ok(dismissed);
     }
 
-    @DeleteMapping("/attendance/{id}/dismiss")
+    @DeleteMapping("/attendance/excusal/{course_id}/{section_id}/{date}/{student_id}/dismiss")
     ResponseEntity<String> cancelDismissal(@PathVariable Long id, @RequestParam String studentId) {
        
         dismissedStudentRepository.deleteByStudentId(studentId);
-        return ResponseEntity.ok("Dismissal cancelled for student ID: " + studentId);
+        return ResponseEntity.ok("Excusal cancelled for student ID: " + studentId);
     }
-
 }
