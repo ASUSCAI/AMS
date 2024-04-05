@@ -1,10 +1,9 @@
 package com.ams.restapi.timeConfig;
 
-import com.ams.restapi.courseInfo.CourseInfo;
+import com.ams.restapi.sectionInfo.SectionInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,22 +13,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
-import com.fasterxml.jackson.databind.SerializationFeature;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.hamcrest.Matchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -37,7 +30,8 @@ public class TimeConfigControllerTests {
     @Autowired private TimeConfigController controller;
     @Autowired private MockMvc mockMvc;
 
-    @Test void contextLoads() throws Exception {
+    @Test
+    void contextLoads() {
         assertNotNull(controller);
     }
     
@@ -58,14 +52,13 @@ public class TimeConfigControllerTests {
 
         LocalTime startTime = LocalTime.of(8, 30);
         LocalTime endTime = LocalTime.of(9, 45);
-        CourseInfo testCourseInfo = new CourseInfo(1234L, 1234L, "CSE 110", "COOR170",
-                List.of(DayOfWeek.MONDAY),
-                startTime, endTime);
+        SectionInfo testCourseInfo = new SectionInfo(1234L, "CSE 110", "COOR170",
+                List.of(DayOfWeek.MONDAY), startTime, endTime);
 
 
         mockMvc.perform(put("/courseInfo/1234").with(csrf())
-                .contentType("application/json")
-                .content(mapper.writeValueAsString(testCourseInfo)))
+                        .contentType("application/json")
+                        .content(mapper.writeValueAsString(testCourseInfo)))
                 .andExpect(status().isOk()).andDo(print());
 
         TimeConfig updatedTimeConfig = new TimeConfig(
@@ -104,7 +97,7 @@ public class TimeConfigControllerTests {
     void courseInfoShouldGenerateDefaultTimeConfig() throws Exception {
         LocalTime startIn = LocalTime.of(10, 10);
         LocalTime endIn = LocalTime.of(11, 50);
-        CourseInfo testCourseInfo = new CourseInfo(1234L, 1234L, "CSE 110", "COOR170", List.of(DayOfWeek.MONDAY), startIn, endIn);
+        SectionInfo testCourseInfo = new SectionInfo(1234L, "CSE 110", "COOR170", List.of(DayOfWeek.MONDAY), startIn, endIn);
         
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
