@@ -1,9 +1,9 @@
 package com.ams.restapi.authentication;
 
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -24,9 +24,9 @@ public class CustomJwtGrantedAuthoritiesConverter implements Converter<Jwt, Coll
         Set<GrantedAuthority> authorities = new HashSet<>();
         
         if (adminEmailService.isAdminEmail(email)) {
-            Role adminRole = new Role();
-            adminRole.setRole(Role.RoleType.ADMIN);
-            authorities.add(new SimpleGrantedAuthority(adminRole.getAuthority()));
+            Enrollment adminEnrollment = new Enrollment();
+            adminEnrollment.setRole(Enrollment.RoleType.ADMIN);
+            authorities.add(new SimpleGrantedAuthority(adminEnrollment.getAuthority()));
         }
 
         return authorities;

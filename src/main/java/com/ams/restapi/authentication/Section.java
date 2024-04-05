@@ -1,47 +1,60 @@
 package com.ams.restapi.authentication;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+
 import java.util.HashSet;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-
 @Entity
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "sectionId")
 public class Section {
 
-    private String courseCode;
+    private String name;
 
     @Id
     private String sectionId;
 
-    @ManyToMany(mappedBy = "sections")
+    @OneToMany(mappedBy = "section")
     @JsonIgnore
-    private Set<Role> roles = new HashSet<>();
+    private Set<Enrollment> enrollments = new HashSet<>();
 
-    public String getCourseCode() {
-        return courseCode;
+    public Section(String name, String sectionId) {
+        this.name = name;
+        this.sectionId = sectionId;
+    }
+
+    public Section() {
+
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getSectionId() {
         return sectionId;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
     public void setSectionId(String sectionId) {
         this.sectionId = sectionId;
     }
 
-    public void setCourseCode(String courseCode) {
-        this.courseCode = courseCode;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public Set<Enrollment> getEnrollments() {
+        return enrollments;
+    }
+
+    public void setEnrollments(Set<Enrollment> enrollments) {
+        this.enrollments = enrollments;
     }
 }

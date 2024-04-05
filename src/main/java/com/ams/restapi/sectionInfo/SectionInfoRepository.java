@@ -12,11 +12,11 @@ import java.util.Optional;
 public interface SectionInfoRepository extends JpaRepository<SectionInfo, Long> {
     @Query("SELECT c.defaultTimeConfig FROM SectionInfo c join c.daysOfWeek d "
             + "inner join c.defaultTimeConfig conf WHERE "
-            + "(:room = c.room) and "
+            + "(:defaultReaderId = c.defaultReaderId) and "
             + "(:dayOfWeek = d) and "
             + "(:time between conf.beginIn and conf.endOut)")
     Optional<TimeConfig> resolve(
-            @Param("room") String room,
+            @Param("defaultReaderId") String defaultReaderId,
             @Param("dayOfWeek") DayOfWeek dayOfWeek,
             @Param("time") LocalTime time);
 }

@@ -1,6 +1,6 @@
 package com.ams.restapi;
 
-import com.ams.restapi.sectionInfo.SectionInfoRepository;
+import com.ams.restapi.authentication.SectionRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,20 +11,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class RootController {
 
     @Autowired
-    private SectionInfoRepository sectionInfoRepository;
+    private SectionRepository sectionRepository;
 
     @GetMapping("/")
     public String home(@RequestParam("courseId") String courseId, HttpServletResponse response) {
         System.out.println("HERE IS THE COURSE ID >>>>>>>>>" + courseId);
-        if (sectionInfoRepository.findById(Long.parseLong(courseId)).get() != null) {
-            response.addHeader("Course-Id", courseId);
-            return "index.html";
-        }
-        return "error.html";
+        response.addHeader("Course-Id", courseId);
+        return "index.html";
+//        return sectionRepository.findBySectionId(courseId)
+//                .map(section -> {
+//
+//                })
+//                .orElse("error.html");
     }
-
-    private String extractCourseIdFromReferer(String referer) {
-        return "Extracted CourseId";
-    }
-
 }

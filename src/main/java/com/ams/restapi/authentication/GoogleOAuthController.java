@@ -5,25 +5,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 @Controller
 public class GoogleOAuthController {
-    
+
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired 
-    private RoleRepository roleRepository;
-
     @Autowired
-    private SectionRepository sectionRepository;
+    private EnrollmentRepository enrollmentRepository;
 
     @GetMapping("/csrf")
     public @ResponseBody String getCsrfToken(HttpServletRequest request) {
@@ -31,68 +32,31 @@ public class GoogleOAuthController {
         return csrf.getToken();
     }
 
-    @GetMapping("/websocket")
-    public String webSocket(){
-        return "webSocket.html";
-    }
-
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    @GetMapping("/admin/users")
-    public ResponseEntity<List<User>> getUsers() {
-        List<User> users = userRepository.findAll();
-        return ResponseEntity.ok(users);
-    }
-
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    @GetMapping("/admin/roles")
-    public ResponseEntity<List<Role>> getRoles() {
-        List<Role> roles = roleRepository.findAll();
-        return ResponseEntity.ok(roles);
-    }
-
-
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    @GetMapping("/admin/users/{userId}/roles")
-    public ResponseEntity<Set<Role>> getUserRoles(@PathVariable Long userId) {
-        User user = userRepository.findById(userId)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-
-        Set<Role> roles = roleRepository.findByUsersContains(user);
-        return ResponseEntity.ok(roles);
-    }
-    
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_INSTRUCTOR')")
     @GetMapping("/sections")
-    public ResponseEntity<List<Section>> getAllSections() {
-        List<Section> sections = sectionRepository.findAll();
-        return ResponseEntity.ok(sections);
-    }
+    public ResponseEntity<List<Enrollment>> getCurrentUserSections(Authentication authentication) {
+        String email = null;
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    @PostMapping("/admin/sections")
-    public ResponseEntity<Section> createSection(@RequestBody Section section) {
-        Section newSection = sectionRepository.save(section);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newSection);
-    }
+        if (authentication.getPrincipal() instanceof OidcUser) {
+            OidcUser oidcUser = (OidcUser) authentication.getPrincipal();
+            email = oidcUser.getEmail(); // Assuming getEmail() directly fetches the email.
+        } else if (authentication instanceof JwtAuthenticationToken) {
+            JwtAuthenticationToken jwtAuth = (JwtAuthenticationToken) authentication;
+            Jwt jwt = jwtAuth.getToken();
+            email = jwt.getClaimAsString("email");
+        }
 
-    @PutMapping("/admin/users/{userId}/assign-role-section")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> assignRoleAndSectionToUser(
-            @PathVariable Long userId, 
-            @RequestParam("roleId") Long roleId,
-            @RequestParam("sectionId") Long sectionId) {
-
-        User user = userRepository.findById(userId)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-        Role role = roleRepository.findById(roleId)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found"));
-        Section section = sectionRepository.findById(sectionId)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Section not found"));
-
-        role.getSections().add(section);
-        user.getRoles().add(role);
-        userRepository.save(user);
-
-        return ResponseEntity.ok().build();
+        if (email != null) {
+            Optional<User> userOptional = userRepository.findByEmail(email);
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                List<Enrollment> enrollment = enrollmentRepository.findByUser(user);
+                return ResponseEntity.ok(enrollment);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
     }
 }

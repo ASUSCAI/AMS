@@ -15,6 +15,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.csrf.*;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -22,12 +23,6 @@ import java.io.IOException;
 import java.util.function.Supplier;
 
 import static org.springframework.security.config.Customizer.withDefaults;
-
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.csrf.CsrfToken;
-import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
-import org.springframework.security.web.csrf.CsrfTokenRequestHandler;
-import org.springframework.security.web.csrf.XorCsrfTokenRequestAttributeHandler;
 
 @Configuration
 @Profile("prod")
@@ -45,32 +40,34 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .addFilterBefore(new CustomDeviceAuthenticationFilter(deviceService), UsernamePasswordAuthenticationFilter.class)
-                .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN");
-                    auth.requestMatchers("/sections").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");
-                    auth.requestMatchers(HttpMethod.POST, "/attendance").permitAll();
-                    auth.requestMatchers(HttpMethod.GET, "/attendance").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");
-                    auth.requestMatchers(HttpMethod.POST, "/readers").permitAll();
-                    auth.requestMatchers(HttpMethod.GET, "/readers").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");
-                    auth.requestMatchers(HttpMethod.PUT, "/readers").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");
-                    auth.requestMatchers("/esp/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");
-                    auth.anyRequest().authenticated();
-                })
-                .csrf(csrf -> csrf
-                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                        .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())
-                        .ignoringRequestMatchers("/readers/**")
-                )
-                .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
-                .oauth2Login(oauth2 -> oauth2
-                        .userInfoEndpoint(userInfo -> userInfo
-                                .oidcUserService(customOidcUserService)
-                        )
-                )
-                .formLogin(withDefaults()) // can be removed to jump straight to Google OAuth
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));
+		http
+				.addFilterBefore(new CustomDeviceAuthenticationFilter(deviceService), UsernamePasswordAuthenticationFilter.class)
+				.authorizeHttpRequests(auth -> {
+					auth.requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN");
+					auth.requestMatchers("/sections").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");
+					auth.requestMatchers(HttpMethod.POST, "/attendance").permitAll();
+					auth.requestMatchers(HttpMethod.GET, "/attendance").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");
+					auth.requestMatchers(HttpMethod.POST, "/readers").permitAll();
+					auth.requestMatchers(HttpMethod.GET, "/readers").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");
+					auth.requestMatchers(HttpMethod.PUT, "/readers").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");
+					auth.requestMatchers("/esp/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_INSTRUCTOR");
+					auth.requestMatchers("/console/**").permitAll();
+					auth.anyRequest().authenticated();
+				})
+				.csrf(csrf -> csrf
+						.ignoringRequestMatchers("/readers/**")
+						.ignoringRequestMatchers("/console/**")
+						.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+						.csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())
+				)
+				.addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+				.oauth2Login(oauth2 -> oauth2
+						.userInfoEndpoint(userInfo -> userInfo
+								.oidcUserService(customOidcUserService)
+						)
+				)
+				.formLogin(withDefaults()) // can be removed to jump straight to Google OAuth
+				.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));
         return http.build();
     }
 

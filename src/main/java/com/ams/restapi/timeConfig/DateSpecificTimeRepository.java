@@ -14,13 +14,13 @@ public interface DateSpecificTimeRepository
     Optional<DateSpecificTimeConfig> findByCourseAndDate(SectionInfo course, LocalDate date);
 
     @Query("SELECT c.config FROM DateSpecificTimeConfig c "
-    + "inner join c.course cour "
-    + "inner join c.config conf WHERE "
-    + "(:room = cour.room) and "
-    + "(:date = c.date) and "
-    + "(:time between conf.beginIn and conf.endOut)")
+            + "inner join c.course cour "
+            + "inner join c.config conf WHERE "
+            + "(:defaultReaderId = cour.defaultReaderId) and "
+            + "(:date = c.date) and "
+            + "(:time between conf.beginIn and conf.endOut)")
     Optional<TimeConfig> resolve(
-        @Param("room") String room,
-        @Param("date") LocalDate date,
-        @Param("time") LocalTime time);
+            @Param("defaultReaderId") String defaultReaderId,
+            @Param("date") LocalDate date,
+            @Param("time") LocalTime time);
 }

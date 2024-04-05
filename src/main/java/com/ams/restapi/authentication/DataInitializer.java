@@ -4,8 +4,6 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-
 @Component
 public class DataInitializer {
 
@@ -13,10 +11,7 @@ public class DataInitializer {
     private UserRepository userRepository;
 
     @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private CanvasCourseAndUserRefresher canvasSectionRefresher;
+    private EnrollmentRepository enrollmentRepository;
 
     @Autowired
     private AdminEmailService adminEmailService;
@@ -24,37 +19,32 @@ public class DataInitializer {
     @PostConstruct
     public void initAdminUser() {
         adminEmailService.getAdminEmails().forEach(adminEmail -> {
-                User adminUser = userRepository.findByEmail(adminEmail).orElseGet(() -> {
+            User adminUser = userRepository.findByEmail(adminEmail).orElseGet(() -> {
                 User newUser = new User();
                 newUser.setEmail(adminEmail);
-                return userRepository.save(newUser);
+                return userRepository.saveAndFlush(newUser); // Ensure user is saved and flushed
             });
 
-            if (roleRepository.findByUsersContains(adminUser).isEmpty()) {
-                ensureRolesExist();
-                Role defaultRole = roleRepository.findByRole(Role.RoleType.ADMIN)
-                        .orElseThrow(() -> new RuntimeException("Default role not found"));
-                adminUser.getRoles().add(defaultRole);
-                userRepository.save(adminUser);
-            }
-            
-            try{
-                canvasSectionRefresher.updateCoursesAndUsers();
-            } catch (IOException e) {
-
+            if (enrollmentRepository.findByUser(adminUser).isEmpty()) {
+                Enrollment adminEnrollment = new Enrollment();
+                adminEnrollment.setRole(Enrollment.RoleType.ADMIN);
+                adminEnrollment.setUser(adminUser); // User is already persisted
+                // Set other properties of adminEnrollment
+                enrollmentRepository.save(adminEnrollment); // Now it's safe to save Enrollment
             }
         });
-        
+
     }
 
-    private void ensureRolesExist() {
-        for (Role.RoleType roleType : Role.RoleType.values()) {
-            roleRepository.findByRole(roleType)
-                .orElseGet(() -> {
-                    Role newRole = new Role();
-                    newRole.setRole(roleType);
-                    return roleRepository.save(newRole);
-                });
-        }
-    }
+//    private void ensureRolesExist() {
+//        for (Enrollment.RoleType roleType : Enrollment.RoleType.values()) {
+//            List<Enrollment> enrollments = enrollmentRepository.findByRole(roleType);
+//            if (enrollments.isEmpty()) {
+//                Enrollment newEnrollment = new Enrollment();
+//                newEnrollment.setRole(roleType);
+//                // You might need to set a default or a null section here, or adjust your model to handle this case
+//                enrollmentRepository.save(newEnrollment);
+//            }
+//        }
+//    }
 }
