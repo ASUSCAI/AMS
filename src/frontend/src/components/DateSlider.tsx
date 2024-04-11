@@ -17,6 +17,7 @@ interface IntervalSliderProps {
   refresh: number;
   disabled: boolean;
   onChange: (value: string[]) => void;
+  isOneHandleMode?: boolean;
 }
 
 const DateSlider: React.FC<IntervalSliderProps> = (props) => {
@@ -29,9 +30,6 @@ const DateSlider: React.FC<IntervalSliderProps> = (props) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // const getTimeStamp = (date: Date) => {
-    //   return (60 * date.getHours()) + date.getMinutes();
-    // }
     const getTimeStamp = (time: String) => {
       let a = time.split(':');
       return (+a[0]) * 60 + (+a[1]);
@@ -47,19 +45,13 @@ const DateSlider: React.FC<IntervalSliderProps> = (props) => {
       console.log("TimeConfigData");
       console.log(props.timeConfigData);
 
-      // const beginInDate = new Date(props.timeConfigData.beginIn);
-      // const endInDate = new Date(props.timeConfigData.endIn);
-      // const endLateDate = new Date(props.timeConfigData.endLate);
-      // const beginOutDate = new Date(props.timeConfigData.beginOut);
-      // const endOutDate = new Date(props.timeConfigData.endOut);
-      //
-      // setDay(new Date(beginInDate.toDateString()));
-      // const beginInTimestamp = getTimeStamp(beginInDate);
-      // const endOutTimestamp = getTimeStamp(endOutDate);
-      // const valueTimeStamps = [getTimeStamp(endInDate), getTimeStamp(endLateDate), getTimeStamp(beginOutDate)]
       const beginInTimestamp = getTimeStamp(props.timeConfigData.beginIn);
       const endOutTimestamp = getTimeStamp(props.timeConfigData.endOut);
-      const valueTimeStamps = [getTimeStamp(props.timeConfigData.endIn), getTimeStamp(props.timeConfigData.endLate), getTimeStamp(props.timeConfigData.beginOut)]
+      const valueTimeStamps = [
+          getTimeStamp(props.timeConfigData.endIn),
+          getTimeStamp(props.timeConfigData.endLate),
+          getTimeStamp(props.timeConfigData.beginOut)
+      ];
 
       console.log("valueTimeStamps");
       console.log(valueTimeStamps);
@@ -69,7 +61,7 @@ const DateSlider: React.FC<IntervalSliderProps> = (props) => {
       setLoading(false);
       onSliderChange(valueTimeStamps);
     }
-  }, [props.timeConfigData, props.refresh, loading]);
+  }, [props.timeConfigData, props.isOneHandleMode, props.refresh, loading]);
 
   const onSliderChange = (valueTimeStamps: number[]) => {
     if (loading) {
@@ -134,10 +126,10 @@ const DateSlider: React.FC<IntervalSliderProps> = (props) => {
   return (
     <div className={`slider-container ${props.disabled ? "disabled" : ""}`}>
       <ReactSlider
-        className="horizontal-slider"
+        className={"horizontal-slider" + (props.isOneHandleMode ? " one-handle" : "")}
         thumbClassName="thumb"
-        trackClassName="track"
-        value={value}
+        trackClassName={"track" + (props.isOneHandleMode ? "-one-handle" : "")}
+        value={props.isOneHandleMode ? [value[1]] : value}
         renderTrack={Track}
         renderThumb={Thumb}
         onChange={onSliderChange}

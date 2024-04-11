@@ -1,19 +1,18 @@
-import {Button, CloseButton, Flex, Heading, Tray, View} from "@instructure/ui";
-import ThresholdBox from "./ThresholdBox";
-import SpecConfigBox from "./SpecConfigBox";
-import SectionConfig from "./SectionConfig";
-import React from "react";
+import React, { Component } from 'react';
+import { Button, CloseButton, Flex, Tray, View } from '@instructure/ui';
+import ThresholdBox from './ThresholdBox';
+import SpecConfigBox from './SpecConfigBox';
+import SectionConfig from './SectionConfig';
 
-
-interface ConfigTrayProps {
-}
+interface ConfigTrayProps {}
 
 interface ConfigTrayState {
   open: boolean;
 }
 
+export class ConfigTray extends Component<ConfigTrayProps, ConfigTrayState> {
+  private trayRef: HTMLDivElement | null = null;
 
-export class ConfigTray extends React.Component<ConfigTrayProps, ConfigTrayState> {
   constructor(props: ConfigTrayProps) {
     super(props);
     this.state = {
@@ -21,18 +20,31 @@ export class ConfigTray extends React.Component<ConfigTrayProps, ConfigTrayState
     };
   }
 
+  // componentDidMount() {
+  //   document.addEventListener('mousedown', this.handleClickOutside);
+  // }
+  //
+  // componentWillUnmount() {
+  //   document.removeEventListener('mousedown', this.handleClickOutside);
+  // }
+
   hideTray = () => {
     this.setState({
       open: false,
     });
   };
 
+  handleClickOutside = (event: MouseEvent) => {
+    if (this.trayRef && !this.trayRef.contains(event.target as Node)) {
+      this.hideTray();
+    }
+  };
 
   renderCloseButton() {
     return (
       <Flex>
         <Flex.Item shouldGrow shouldShrink>
-          <div className="expand-label" style={{display: 'inline-block'}}>Date Specific Time Config</div>
+          <div className="expand-label" style={{ display: 'inline-block' }}>Date Specific Time Config</div>
         </Flex.Item>
         <Flex.Item>
           <CloseButton
@@ -47,23 +59,19 @@ export class ConfigTray extends React.Component<ConfigTrayProps, ConfigTrayState
   }
 
   render() {
-
     return (
-      <div className="time-config-btn">
+      <div className="time-config-btn" ref={node => this.trayRef = node}>
         <Button
           onClick={() => {
-            this.setState({open: true});
+            this.setState({ open: true });
           }}
-          // ref={(c) => (this._showButton = c)}
         >
           Show Time Config
         </Button>
         <Tray
           label="Tray Example"
           open={this.state.open}
-          onDismiss={() => {
-            this.setState({open: false});
-          }}
+          onDismiss={this.hideTray}
           shouldCloseOnDocumentClick={false}
           transitionExit={true}
           size="regular"
@@ -71,9 +79,9 @@ export class ConfigTray extends React.Component<ConfigTrayProps, ConfigTrayState
         >
           <View as="div" padding="medium">
             {this.renderCloseButton()}
-            <SpecConfigBox/>
+            <SpecConfigBox />
             {/*<ThresholdBox/>*/}
-            <SectionConfig/>
+            <SectionConfig />
           </View>
         </Tray>
       </div>
