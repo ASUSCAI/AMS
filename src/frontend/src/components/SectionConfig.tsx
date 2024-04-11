@@ -5,6 +5,7 @@ import {RiArrowDownSLine, RiArrowUpSLine} from "react-icons/ri";
 
 import {TimeConfig, BoundError, areTimeConfigsEqual} from "./ThresholdBox";
 import DateSlider from "@/components/DateSlider";
+import {useDefaultTimeConfig} from "@/contexts/DefaultTimeConfigContext";
 
 export type CourseInfo = {
   // add more attributes moving forward
@@ -17,6 +18,7 @@ export type CourseInfo = {
 };
 
 const SectionConfig = () => {
+  const { defaultTimeConfigData, setDefaultTimeConfigData } = useDefaultTimeConfig();
   const [currCourse, setCurrCourse] = useState<CourseInfo>();
   const [inputCourse, setInputCourse] = useState<CourseInfo>();
   const [error, setError] = useState<BoundError>();
@@ -25,7 +27,7 @@ const SectionConfig = () => {
   const days = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"];
   const daysLabel = ["M", "T", "W", "Th", "F"];
 
-  const courseID = 85;
+  const courseID = 1234;
 
   useEffect(() => {
     const fetchSectionConfig = async () => {
@@ -36,6 +38,7 @@ const SectionConfig = () => {
           console.log(fetchedCourse)
           setCurrCourse(fetchedCourse);
           setInputCourse(fetchedCourse);
+          setDefaultTimeConfigData(fetchedCourse.defaultTimeConfig);
         })
         .catch((err) => {
           console.error("Error fetching courseInfo:", err);
@@ -128,6 +131,7 @@ const SectionConfig = () => {
   };
   const handleSave = () => {
     setCurrCourse(inputCourse);
+    setDefaultTimeConfigData(inputCourse?.defaultTimeConfig);
     const updateSectionConfig = async () => {
 
       await axios.put(process.env.NEXT_PUBLIC_URL + "/courseInfo/" + courseID, inputCourse)
@@ -171,18 +175,17 @@ const SectionConfig = () => {
       <div className="specific-config-box">
         <div className="wrapper">
           <label htmlFor="sectionName">Section Name: </label>
-          &nbsp;&nbsp;
           <select id="sectionName">
             <option value="sectionA">Section A</option>
             <option value="sectionB">Section B</option>
           </select>
         </div>
         <div className="wrapper">
-          <label htmlFor="location">Location: </label>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <label htmlFor="reader">Default Reader:</label>
           <TextInput
-            id="location"
+            id="reader"
             className="wrapper-text"
+            width={"19rem"}
             onChange={(event, value) => {
               setInputCourse((prevData: CourseInfo | undefined) => {
                 if (prevData) {
@@ -196,7 +199,6 @@ const SectionConfig = () => {
         </div>
         <div className="wrapper">
           <label htmlFor="weekdays">Weekdays: </label>
-          &nbsp;&nbsp;&nbsp;
           <div id="weekdays" className="week-days-container">
             {days.map((day, index) => (
               <button
@@ -213,7 +215,6 @@ const SectionConfig = () => {
         </div>
         <div className="wrapper">
           <label htmlFor="startTime">Start Time: </label>
-          &nbsp;&nbsp;
           <TimeSelect
             renderLabel=""
             id="startTime"
@@ -234,7 +235,6 @@ const SectionConfig = () => {
         </div>
         <div className="wrapper">
           <label htmlFor="endTime">End Time: </label>
-          &nbsp;&nbsp;&nbsp;
           <TimeSelect
             renderLabel=""
             id="endTime"

@@ -9,6 +9,7 @@ import DateSlider from "./DateSlider";
 // styles
 import axios from "axios";
 import {Button, Checkbox} from "@instructure/ui";
+import {useDefaultTimeConfig} from "@/contexts/DefaultTimeConfigContext";
 
 interface SpecThresholdBoxProps {
   specificDate: Date;
@@ -16,62 +17,39 @@ interface SpecThresholdBoxProps {
 }
 
 const SpecThresholdBox: React.FC<SpecThresholdBoxProps> = ({specificDate}) => {
+  const { defaultTimeConfigData } = useDefaultTimeConfig();
   const [timeConfigData, setTimeConfigData] = useState<TimeConfig>();
   const [inputConfigData, setInputConfigData] = useState<TimeConfig>();
-  const [defaultConfigData, setDefaultConfigData] = useState<TimeConfig>();
   const [useDefault, setUseDefault] = useState(true);
   const [refreshSlider, doRefreshSlider] = useState(0);
+  const [oneHandle, setOneHandle] = useState<boolean>(false);
 
-  const courseID = 85;
+  const courseID = 1234;
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setOneHandle(e.target.checked);
+  };
 
   // ----------- fetch specific time Config -------------
   // fetch default and specific, if no specific, copy from default
   useEffect(() => {
-    const fetchSpecTimeConfig = async (updatedDefaultConfig: TimeConfig) => {
+    (async () => {
+
       const [date] = specificDate.toISOString().split("T");
       try {
-        const res = await axios.get(process.env.NEXT_PUBLIC_URL + "/timeConfig/" + courseID + "/" + date);
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}/timeConfig/${courseID}/${date}`);
         const config = res.data as TimeConfig;
-        const updatedConfig = Object.fromEntries(
-          Object.entries(config).map(([key, value]) => [
-            key,
-            typeof value === "string" ? formatTimeToISODate(value) : value,
-          ])
-        ) as TimeConfig;
-        setTimeConfigData(updatedConfig);
-        setInputConfigData(updatedConfig);
+        setTimeConfigData(config);
+        setInputConfigData(config);
         setUseDefault(false);
       } catch (err) {
         console.error("No Specific TimeConfig:", err);
-        setTimeConfigData(updatedDefaultConfig);
-        setInputConfigData(updatedDefaultConfig);
+        setTimeConfigData(defaultTimeConfigData);
+        setInputConfigData(defaultTimeConfigData);
         setUseDefault(true);
       }
-    };
-
-    const fetchDefaultTimeConfig = async () => {
-      try {
-        const res = await axios.get(process.env.NEXT_PUBLIC_URL + "/timeConfig/" + courseID);
-        const config = res.data as TimeConfig;
-        console.log(config);
-        const updatedConfig = Object.fromEntries(
-          Object.entries(config).map(([key, value]) => [
-            key,
-            // typeof value === "string" ? formatTimeToISODate(value) : value,
-            value,
-          ])
-        ) as TimeConfig;
-
-        setDefaultConfigData(updatedConfig);
-
-        await fetchSpecTimeConfig(updatedConfig);
-      } catch (err) {
-        console.error("Error fetching timeConfigData:", err);
-      }
-    };
-
-    fetchDefaultTimeConfig();
-  }, [courseID, specificDate]);
+    })();
+  }, [specificDate, defaultTimeConfigData]);
 
   // format time string to ISO Date string
   const formatTimeToISODate = (timeVal: string | undefined): string => {
@@ -175,8 +153,8 @@ const SpecThresholdBox: React.FC<SpecThresholdBoxProps> = ({specificDate}) => {
 
   const handleRevertDefault = async () => {
     const [date] = specificDate.toISOString().split("T");
-    setTimeConfigData(defaultConfigData);
-    setInputConfigData(defaultConfigData);
+    setTimeConfigData(defaultTimeConfigData);
+    setInputConfigData(defaultTimeConfigData);
     await axios
       .delete(process.env.NEXT_PUBLIC_URL + "/timeConfig/" + courseID + "/" + date)
       .then((response) => {
@@ -194,6 +172,7 @@ const SpecThresholdBox: React.FC<SpecThresholdBoxProps> = ({specificDate}) => {
         timeConfigData={timeConfigData}
         refresh={refreshSlider}
         disabled={useDefault}
+        isOneHandleMode={oneHandle}
         onChange={(value: string[]) =>
           setInputConfigData((prevData: TimeConfig | undefined) => {
             if (prevData) {
@@ -206,10 +185,16 @@ const SpecThresholdBox: React.FC<SpecThresholdBoxProps> = ({specificDate}) => {
       <div className="spec-btn-sect">
         <div className="use-default-checkbox">
           <Checkbox
-            label="Use Default Time Config"
-            value={"medium"}
+            label="Default Config"
             checked={useDefault}
+            size={"small"}
             onChange={handleDefaultToggle}
+          />
+          <Checkbox
+            label="Assignment"
+            checked={oneHandle}
+            size={"small"}
+            onChange={handleCheckboxChange}
           />
         </div>
         <div className="btn-box">
