@@ -1,10 +1,24 @@
 import {Button, SimpleSelect, TextInput} from "@instructure/ui";
 import React, {useEffect, useState} from "react";
 import { Value } from "sass";
+import ConfirmModal from './ConfirmModal';
 
 const AutograderTray = () => {
     const [scale, setScale] = useState(true);
     const scaleTextInput = document.getElementById("scaleTextInput");
+    const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+    const [modalMessage, setModalMessage] = useState('');
+
+
+
+    const openConfirmModal = (message: string) => {
+        setModalMessage(message);
+        setIsConfirmModalOpen(true);
+      };
+
+    const closeConfirmModal = () => {
+        setIsConfirmModalOpen(false);
+      };
 
     const handleCancel = () => {
         //CHANGE TO RETURN BACK TO ORIGINAL INPUT
@@ -12,6 +26,7 @@ const AutograderTray = () => {
 
     const handleSave = () => {
         //CHANGE TO SAVE INPUTS
+        openConfirmModal("Do you want to proceed with this change?");
     };
 
     const handleAutograder = () => {
@@ -148,8 +163,11 @@ const AutograderTray = () => {
                     >
                         Save
                     </Button>
+                    
                     </div>
+                    
                 </div>
+                <ConfirmModal isOpen={isConfirmModalOpen} onClose={closeConfirmModal} message={modalMessage} />
             </div>
         </div>
     );
