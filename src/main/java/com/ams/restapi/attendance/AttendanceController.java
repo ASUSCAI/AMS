@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ams.restapi.attendance.AttendanceRecord.AttendanceType;
 import com.ams.restapi.courseInfo.CourseInfoRepository;
@@ -42,10 +43,11 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
-
+import org.springframework.http.HttpStatus;
 
 /**
  * Attendance Record Management endpoints
+ * 
  * @author Ryan Woo (rtwoo)
  */
 @RestController
@@ -54,83 +56,83 @@ class AttendanceController {
     private final AttendanceRepository repository;
     private final CourseInfoRepository courseInfo;
     private final DateSpecificTimeRepository dateConfigs;
-    private final DismissedStudentRepository dismissedStudentRepository; 
+    private final DismissedStudentRepository dismissedStudentRepository;
 
     @PersistenceContext
     private EntityManager eManager;
 
     AttendanceController(AttendanceRepository repository,
-            CourseInfoRepository courseInfo, DateSpecificTimeRepository dateConfigs, DismissedStudentRepository dismissedStudentRepository) {
+            CourseInfoRepository courseInfo, DateSpecificTimeRepository dateConfigs,
+            DismissedStudentRepository dismissedStudentRepository) {
         this.repository = repository;
         this.courseInfo = courseInfo;
         this.dateConfigs = dateConfigs;
-        this.dismissedStudentRepository = dismissedStudentRepository; 
+        this.dismissedStudentRepository = dismissedStudentRepository;
     }
 
     // Multi-item
 
     @GetMapping("/attendance")
     ResponseEntity<List<AttendanceRecordDTO>> search(
-        @RequestParam("room") Optional<String> room,
-        @RequestParam("date") Optional<LocalDate> date,
-        @RequestParam("startTime") Optional<LocalTime> startTime,
-        @RequestParam("endTime") Optional<LocalTime> endTime,
-        @RequestParam("sid") Optional<String> sid,
-        @RequestParam("types") Optional<List<AttendanceType>> types,
-        @RequestParam("page") int page,
-        @RequestParam("size") int size,
-        @RequestParam("sortBy") Optional<String> sortBy,
-        @RequestParam("sortType") Optional<String> sortType) {
-            
-            if (room == null || room.isEmpty() || date == null || date.isEmpty())
-                throw new AttendanceRecordPostInvalidException("Missing some/all required fields");
-            Pageable pageable = PageRequest.of(page, size);
+            @RequestParam("room") Optional<String> room,
+            @RequestParam("date") Optional<LocalDate> date,
+            @RequestParam("startTime") Optional<LocalTime> startTime,
+            @RequestParam("endTime") Optional<LocalTime> endTime,
+            @RequestParam("sid") Optional<String> sid,
+            @RequestParam("types") Optional<List<AttendanceType>> types,
+            @RequestParam("page") int page,
+            @RequestParam("size") int size,
+            @RequestParam("sortBy") Optional<String> sortBy,
+            @RequestParam("sortType") Optional<String> sortType) {
 
-            CriteriaBuilder criteriaBuilder = eManager.getCriteriaBuilder();
-            CriteriaQuery<AttendanceRecord> criteriaQuery = criteriaBuilder.createQuery(AttendanceRecord.class);
-            Root<AttendanceRecord> from = criteriaQuery.from(AttendanceRecord.class);
+        if (room == null || room.isEmpty() || date == null || date.isEmpty())
+            throw new AttendanceRecordPostInvalidException("Missing some/all required fields");
+        Pageable pageable = PageRequest.of(page, size);
 
-            CriteriaQuery<AttendanceRecord> select = criteriaQuery.select(from);
-            List<Predicate> predicates = genPredicates(room, date, startTime, endTime, sid, types,
+        CriteriaBuilder criteriaBuilder = eManager.getCriteriaBuilder();
+        CriteriaQuery<AttendanceRecord> criteriaQuery = criteriaBuilder.createQuery(AttendanceRecord.class);
+        Root<AttendanceRecord> from = criteriaQuery.from(AttendanceRecord.class);
+
+        CriteriaQuery<AttendanceRecord> select = criteriaQuery.select(from);
+        List<Predicate> predicates = genPredicates(room, date, startTime, endTime, sid, types,
                 criteriaBuilder, from);
-            
-            if (sortType.isPresent() && sortBy.isPresent()) {
-                if (sortType.get().equals("desc")) {
-                    select.orderBy(criteriaBuilder.desc(from.get(sortBy.get())));
-                } else {
-                    select.orderBy(criteriaBuilder.asc((from.get(sortBy.get()))));      
-                }
-            }
-            select.where(criteriaBuilder.and(predicates.toArray(Predicate[]::new)));
-            
 
-            // TypedQuery<AttendanceRecord> typedQuery = eManager.createQuery(select);
-            // List<AttendanceRecord> result = typedQuery.getResultList();
-            // Long count = (long)eManager.createQuery(select).getResultList().size();
-            List<AttendanceRecord> result = eManager.createQuery(select)
+        if (sortType.isPresent() && sortBy.isPresent()) {
+            if (sortType.get().equals("desc")) {
+                select.orderBy(criteriaBuilder.desc(from.get(sortBy.get())));
+            } else {
+                select.orderBy(criteriaBuilder.asc((from.get(sortBy.get()))));
+            }
+        }
+        select.where(criteriaBuilder.and(predicates.toArray(Predicate[]::new)));
+
+        // TypedQuery<AttendanceRecord> typedQuery = eManager.createQuery(select);
+        // List<AttendanceRecord> result = typedQuery.getResultList();
+        // Long count = (long)eManager.createQuery(select).getResultList().size();
+        List<AttendanceRecord> result = eManager.createQuery(select)
                 .setFirstResult((int) pageable.getOffset()).setMaxResults(pageable.getPageSize())
                 .getResultList();
 
-            // Fetches the count of all AttendanceRecords as per given criteria
-            CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
-            Root<AttendanceRecord> countFrom = countQuery.from(AttendanceRecord.class);
-            countQuery.select(criteriaBuilder.count(countFrom));
-            List<Predicate> countPredicates = genPredicates(room, date, startTime, endTime, sid, types,
+        // Fetches the count of all AttendanceRecords as per given criteria
+        CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
+        Root<AttendanceRecord> countFrom = countQuery.from(AttendanceRecord.class);
+        countQuery.select(criteriaBuilder.count(countFrom));
+        List<Predicate> countPredicates = genPredicates(room, date, startTime, endTime, sid, types,
                 criteriaBuilder, countFrom);
-            // * not necessary to sort when just counting
-            countQuery.where(criteriaBuilder.and(countPredicates.toArray(Predicate[]::new)));
-            Long count = eManager.createQuery(countQuery).getSingleResult();
+        // * not necessary to sort when just counting
+        countQuery.where(criteriaBuilder.and(countPredicates.toArray(Predicate[]::new)));
+        Long count = eManager.createQuery(countQuery).getSingleResult();
 
-            Page<AttendanceRecord> pResult = new PageImpl<>(result, pageable, count);
+        Page<AttendanceRecord> pResult = new PageImpl<>(result, pageable, count);
 
-            if (page >= pResult.getTotalPages()) {
-                throw new AttendanceLogPageOutofBoundsException(page, size);
-            }
+        if (page >= pResult.getTotalPages()) {
+            throw new AttendanceLogPageOutofBoundsException(page, size);
+        }
 
-            return ResponseEntity.ok()
+        return ResponseEntity.ok()
                 .header("Total-Pages", Integer.toString(pResult.getTotalPages()))
                 .body(pResult.getContent().stream().map(AttendanceRecordDTO::new)
-                    .collect(Collectors.toList()));
+                        .collect(Collectors.toList()));
     }
 
     private List<Predicate> genPredicates(Optional<String> room, Optional<LocalDate> date,
@@ -147,8 +149,10 @@ class AttendanceController {
             predicates.add(criteriaBuilder.greaterThanOrEqualTo(from.get("time"), startTime.get()));
         if (endTime.isPresent())
             predicates.add(criteriaBuilder.lessThanOrEqualTo(from.get("time"), endTime.get()));
-        if (sid.isPresent()) predicates.add(criteriaBuilder.equal(from.get("sid"), sid.get()));
-        if (types.isPresent() && types.get().size() > 0) predicates.add(from.get("type").in(types.get()));
+        if (sid.isPresent())
+            predicates.add(criteriaBuilder.equal(from.get("sid"), sid.get()));
+        if (types.isPresent() && types.get().size() > 0)
+            predicates.add(from.get("type").in(types.get()));
         return predicates;
     }
 
@@ -156,22 +160,22 @@ class AttendanceController {
 
     @PostMapping("/attendance")
     AttendanceRecordDTO createSingle(@Valid @RequestBody AttendanceRecordDTO newLog) {
-        
+
         LocalDate rDate;
         LocalTime rTime;
 
         try {
-            if (newLog.getTimestamp() != null) {    
+            if (newLog.getTimestamp() != null) {
                 LocalDateTime triggerTime = LocalDateTime.ofInstant(
-                    Instant.ofEpochSecond(newLog.getTimestamp()),
-                    ZoneId.of("MST", ZoneId.SHORT_IDS)); 
+                        Instant.ofEpochSecond(newLog.getTimestamp()),
+                        ZoneId.of("MST", ZoneId.SHORT_IDS));
                 rDate = triggerTime.toLocalDate();
                 rTime = triggerTime.toLocalTime();
             } else {
                 rDate = LocalDate.parse(newLog.getDate());
                 rTime = LocalTime.parse(newLog.getTime());
             }
-        } catch(DateTimeException e) {
+        } catch (DateTimeException e) {
             e.printStackTrace();
             return null;
         }
@@ -179,14 +183,11 @@ class AttendanceController {
         TimeConfig config;
         try {
             System.out.println(newLog.getRoom()
-                + " " + rDate.getDayOfWeek()
-                + " " + rTime);
-            config =
-                dateConfigs.resolve(newLog.getRoom(), rDate, rTime)
-                    .orElseGet(() ->
-                    courseInfo.resolve(newLog.getRoom(), rDate.getDayOfWeek(), rTime).get()
-                );
-            
+                    + " " + rDate.getDayOfWeek()
+                    + " " + rTime);
+            config = dateConfigs.resolve(newLog.getRoom(), rDate, rTime)
+                    .orElseGet(() -> courseInfo.resolve(newLog.getRoom(), rDate.getDayOfWeek(), rTime).get());
+
             // * just in case we missed the date specific time config
             // * resolve it from the course relation accessible from the resolved default
             Optional<DateSpecificTimeConfig> check = dateConfigs.findByCourseAndDate(config.getCourse(), rDate);
@@ -195,7 +196,7 @@ class AttendanceController {
 
         } catch (NoSuchElementException e) {
             System.out.printf("%s, %s, %s",
-                newLog.getRoom(), rDate.toString(), rDate.getDayOfWeek(), rTime.toString());
+                    newLog.getRoom(), rDate.toString(), rDate.getDayOfWeek(), rTime.toString());
             e.printStackTrace(System.out);
             throw new AttendanceRecordPostInvalidException("Failed to resolve time config for the given datetime");
         }
@@ -205,7 +206,7 @@ class AttendanceController {
             rType = AttendanceType.INVALID;
         } else {
             List<AttendanceRecord> previousScans = repository.findByRoomAndDateAndTimeBetweenAndSid(
-                newLog.getRoom(), rDate, config.getBeginIn(), config.getEndOut(), newLog.getSid());
+                    newLog.getRoom(), rDate, config.getBeginIn(), config.getEndOut(), newLog.getSid());
 
             if (previousScans.size() == 0) { // ARRIVE
                 if (rTime.isAfter(config.getBeginIn().minusMinutes(1L)) &&
@@ -232,38 +233,45 @@ class AttendanceController {
         AttendanceRecord record = newLog.toEntity(rDate, rTime, rType);
 
         System.out.println("Successfully received POST, sending response...");
-        
+
         return new AttendanceRecordDTO(repository.save(record));
     }
 
     @GetMapping("/attendance/{id}")
     AttendanceRecordDTO getSingle(@PathVariable Long id) {
         return new AttendanceRecordDTO(repository.findById(id)
-            .orElseThrow(() -> new AttendanceLogNotFoundException(id)));
+                .orElseThrow(() -> new AttendanceLogNotFoundException(id)));
     }
 
     @PutMapping("/attendance/{id}")
     AttendanceRecordDTO updateSingle(@PathVariable Long id, @Valid @RequestBody AttendanceRecord newLog) {
-        if (!repository.existsById(id)) throw new AttendanceLogNotFoundException(id);
-        
+        if (!repository.existsById(id))
+            throw new AttendanceLogNotFoundException(id);
+
         newLog.setId(id);
         return new AttendanceRecordDTO(repository.save(newLog));
     }
 
     @DeleteMapping("/attendance/{id}")
     ResponseEntity<String> delete(@PathVariable Long id) {
-        if (!repository.existsById(id)) throw new AttendanceLogNotFoundException(id);
+        if (!repository.existsById(id))
+            throw new AttendanceLogNotFoundException(id);
 
         repository.deleteById(id);
         return ResponseEntity.ok("Deleted attendance log " + id);
     }
 
     @PostMapping("/attendance/excusal/{course_id}/{section_id}/{date}/{student_id}/dismiss")
-    ResponseEntity<DismissedStudent> dismissStudent(@PathVariable Long id, @RequestParam String studentId) {
-        AttendanceRecord record = repository.findById(id)
-                .orElseThrow(() -> new AttendanceLogNotFoundException(id));
+    ResponseEntity<DismissedStudent> dismissStudent(
+            @PathVariable("course_id") Long courseId,
+            @PathVariable("section_id") Long sectionId,
+            @PathVariable("date") String date,
+            @PathVariable("student_id") String studentId) {
 
         DismissedStudent dismissedStudent = new DismissedStudent();
+        dismissedStudent.setCourseId(courseId);
+        dismissedStudent.setSectionId(sectionId);
+        dismissedStudent.setDate(date);
         dismissedStudent.setStudentId(studentId);
         DismissedStudent savedDismissedStudent = dismissedStudentRepository.save(dismissedStudent);
 
@@ -271,16 +279,35 @@ class AttendanceController {
     }
 
     @GetMapping("/attendance/excusal/{course_id}/{section_id}/{date}/{student_id}/dismiss")
-    ResponseEntity<Boolean> isStudentDismissed(@PathVariable Long id, @RequestParam String studentId) {
-        
-        boolean dismissed = dismissedStudentRepository.existsByStudentId(studentId);
-        return ResponseEntity.ok(dismissed);
+    ResponseEntity<DismissedStudent> getDismissedStudent(
+            @PathVariable("course_id") Long courseId,
+            @PathVariable("section_id") Long sectionId,
+            @PathVariable("date") String date,
+            @PathVariable("student_id") String studentId) {
+
+        DismissedStudent dismissedStudent = dismissedStudentRepository
+                .findByCourseIdAndSectionIdAndDateAndStudentId(
+                        courseId, sectionId, date, studentId);
+
+        if (dismissedStudent != null) {
+            return ResponseEntity.ok(dismissedStudent);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Dismissed student not found for course " + courseId +
+                            ", section " + sectionId + ", date " + date + ", student " + studentId);
+        }
     }
 
     @DeleteMapping("/attendance/excusal/{course_id}/{section_id}/{date}/{student_id}/dismiss")
-    ResponseEntity<String> cancelDismissal(@PathVariable Long id, @RequestParam String studentId) {
-       
-        dismissedStudentRepository.deleteByStudentId(studentId);
+    ResponseEntity<String> cancelDismissal(
+            @PathVariable("course_id") Long courseId,
+            @PathVariable("section_id") Long sectionId,
+            @PathVariable("date") String date,
+            @PathVariable("student_id") String studentId) {
+
+        dismissedStudentRepository.deleteByCourseIdAndSectionIdAndDateAndStudentId(courseId, sectionId, date,
+                studentId);
         return ResponseEntity.ok("Excusal cancelled for student ID: " + studentId);
     }
+
 }

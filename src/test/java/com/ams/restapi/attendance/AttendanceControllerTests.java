@@ -105,7 +105,7 @@ public class AttendanceControllerTests {
 
     @Test
     @WithMockUser(roles="INSTRUCTOR")
-    void testDismissStudent() throws Exception {
+    void DismissStudent() throws Exception {
        
         when(attendanceRecordRepository.findById(1L)).thenReturn(java.util.Optional.of(new AttendanceRecord()));
         when(dismissedStudentRepository.save(any())).thenReturn(new DismissedStudent());
@@ -119,7 +119,7 @@ public class AttendanceControllerTests {
 
     @Test
     @WithMockUser(roles="INSTRUCTOR")
-    void testIsStudentDismissed() throws Exception {
+    void IsStudentDismissed() throws Exception {
        
         when(dismissedStudentRepository.existsByStudentId("123")).thenReturn(true);
        
@@ -132,7 +132,7 @@ public class AttendanceControllerTests {
 
     @Test
     @WithMockUser(roles="INSTRUCTOR")
-    void testCancelDismissal() throws Exception {
+    void CancelDismissal() throws Exception {
        
         mockMvc.perform(delete("/attendance/1/dismiss").param("studentId", "123").with(csrf()))
                 .andExpect(status().isOk())
