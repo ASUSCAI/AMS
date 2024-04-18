@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Entity
-public class DismissedStudent {
+public class ExcuseStudent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,7 +59,7 @@ public class DismissedStudent {
         this.studentId = studentId;
     }
 
-    public static DismissedStudent orElseThrow(Optional<DismissedStudent> optionalDismissedStudent, Long courseId, Long sectionId, String date, String studentId) {
+    public static ExcuseStudent orElseThrow(Optional<ExcuseStudent> optionalDismissedStudent, Long courseId, Long sectionId, String date, String studentId) {
         return optionalDismissedStudent.orElseThrow(() -> new NoSuchElementException(
                 "Dismissed student not found for course " + courseId +
                         ", section " + sectionId + ", date " + date + ", student " + studentId));

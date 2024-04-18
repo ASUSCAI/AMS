@@ -25,7 +25,7 @@ public class AttendanceControllerTests {
     @Autowired private AttendanceController controller;
     @Autowired private MockMvc mockMvc; 
     @MockBean private AttendanceRepository attendanceRecordRepository;
-    @MockBean private DismissedStudentRepository dismissedStudentRepository;
+    @MockBean private ExcuseStudentRepository dismissedStudentRepository;
 
     @Test void contextLoads() throws Exception {
         assertNotNull(controller);
@@ -108,7 +108,7 @@ public class AttendanceControllerTests {
     void DismissStudent() throws Exception {
        
         when(attendanceRecordRepository.findById(1L)).thenReturn(java.util.Optional.of(new AttendanceRecord()));
-        when(dismissedStudentRepository.save(any())).thenReturn(new DismissedStudent());
+        when(dismissedStudentRepository.save(any())).thenReturn(new ExcuseStudent());
 
         mockMvc.perform(post("/attendance/1/dismiss").param("studentId", "123").with(csrf()))
                 .andExpect(status().isOk())

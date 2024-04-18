@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.ams.restapi.attendance.AttendanceRecord.AttendanceType;
 import com.ams.restapi.courseInfo.CourseInfoRepository;
@@ -43,7 +42,6 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
-import org.springframework.http.HttpStatus;
 
 /**
  * Attendance Record Management endpoints
@@ -56,18 +54,14 @@ class AttendanceController {
     private final AttendanceRepository repository;
     private final CourseInfoRepository courseInfo;
     private final DateSpecificTimeRepository dateConfigs;
-    private final DismissedStudentRepository dismissedStudentRepository;
 
     @PersistenceContext
     private EntityManager eManager;
 
-    AttendanceController(AttendanceRepository repository,
-            CourseInfoRepository courseInfo, DateSpecificTimeRepository dateConfigs,
-            DismissedStudentRepository dismissedStudentRepository) {
+    AttendanceController(AttendanceRepository repository,CourseInfoRepository courseInfo, DateSpecificTimeRepository dateConfigs) {
         this.repository = repository;
         this.courseInfo = courseInfo;
         this.dateConfigs = dateConfigs;
-        this.dismissedStudentRepository = dismissedStudentRepository;
     }
 
     // Multi-item
@@ -260,54 +254,4 @@ class AttendanceController {
         repository.deleteById(id);
         return ResponseEntity.ok("Deleted attendance log " + id);
     }
-
-    @PostMapping("/attendance/excusal/{course_id}/{section_id}/{date}/{student_id}/dismiss")
-    ResponseEntity<DismissedStudent> dismissStudent(
-            @PathVariable("course_id") Long courseId,
-            @PathVariable("section_id") Long sectionId,
-            @PathVariable("date") String date,
-            @PathVariable("student_id") String studentId) {
-
-        DismissedStudent dismissedStudent = new DismissedStudent();
-        dismissedStudent.setCourseId(courseId);
-        dismissedStudent.setSectionId(sectionId);
-        dismissedStudent.setDate(date);
-        dismissedStudent.setStudentId(studentId);
-        DismissedStudent savedDismissedStudent = dismissedStudentRepository.save(dismissedStudent);
-
-        return ResponseEntity.ok(savedDismissedStudent);
-    }
-
-    @GetMapping("/attendance/excusal/{course_id}/{section_id}/{date}/{student_id}/dismiss")
-    ResponseEntity<DismissedStudent> getDismissedStudent(
-            @PathVariable("course_id") Long courseId,
-            @PathVariable("section_id") Long sectionId,
-            @PathVariable("date") String date,
-            @PathVariable("student_id") String studentId) {
-
-        DismissedStudent dismissedStudent = dismissedStudentRepository
-                .findByCourseIdAndSectionIdAndDateAndStudentId(
-                        courseId, sectionId, date, studentId);
-
-        if (dismissedStudent != null) {
-            return ResponseEntity.ok(dismissedStudent);
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Dismissed student not found for course " + courseId +
-                            ", section " + sectionId + ", date " + date + ", student " + studentId);
-        }
-    }
-
-    @DeleteMapping("/attendance/excusal/{course_id}/{section_id}/{date}/{student_id}/dismiss")
-    ResponseEntity<String> cancelDismissal(
-            @PathVariable("course_id") Long courseId,
-            @PathVariable("section_id") Long sectionId,
-            @PathVariable("date") String date,
-            @PathVariable("student_id") String studentId) {
-
-        dismissedStudentRepository.deleteByCourseIdAndSectionIdAndDateAndStudentId(courseId, sectionId, date,
-                studentId);
-        return ResponseEntity.ok("Excusal cancelled for student ID: " + studentId);
-    }
-
 }
